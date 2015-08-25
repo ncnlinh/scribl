@@ -12,5 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+  
+  if (Auth::check()) return 'Welcome back, ' . Auth::user()->email;
+  return 'Hi guest. ' . link_to('login', 'Login with Facebook!');
 });
+
+Route::get('login', 'AuthController@login'); 
+
+Route::get('logout', 'AuthController@logout');

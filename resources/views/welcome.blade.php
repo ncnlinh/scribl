@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
     <head>
-        <title>Scribl</title>
-
+        <meta charset="utf-8">
+        <title>Scribbl!</title>
         <link href="//fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
         <style>

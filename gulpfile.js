@@ -11,6 +11,26 @@ var elixir = require('laravel-elixir');
  |
  */
 
+var paths = {
+  'bootstrap': './bower_components/bootstrap',
+  'colpick': './bower_components/colpick',
+  'fabric': './bower_components/fabric.js',
+  'jquery': './bower_components/jquery',
+
+};
+
 elixir(function(mix) {
-    mix.sass('app.scss');
+  mix.styles([
+        paths.colpick + '/css/colpick.css',
+        paths.bootstrap + '/dist/css/bootstrap.min.css',
+        paths.bootstrap + '/dist/css/bootstrap-theme.min.css',
+      ], 'public/css/')
+      .copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts')
+      .scripts([
+        paths.jquery + '/dist/jquery.min.js',
+        paths.fabric + '/dist/fabric.min.js',
+        paths.colpick + '/js/colpick.js',
+        'canvas.js'
+      ], 'public/js/app.js')
+      .copy('resources/assets/images/**', 'public/images');
 });

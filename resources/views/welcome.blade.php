@@ -15,8 +15,6 @@
                 padding: 0;
                 width: 100%;
                 display: table;
-                font-weight: 100;
-                font-family: 'Lato';
             }
 
             .container {
@@ -28,10 +26,16 @@
             .content {
                 text-align: center;
                 display: inline-block;
+                font-family: 'Lato';
             }
 
             .title {
                 font-size: 96px;
+                font-weight: 100;
+            }
+            .body {
+                font-size: 16px;
+                font-weight: 100;
             }
         </style>
     </head>
@@ -39,6 +43,7 @@
         <div class="container">
             <div class="content">
                 <div class="title">Scribl</div>
+                <div>{!! link_to('login', 'Login with Facebook')!!}</div>
             </div>
         </div>
     </body>

@@ -17,6 +17,6 @@ class AppController extends Controller
       return view('app');
     }
     public function welcome() {
-      return 'Hi guest. '.link_to('login', 'Login with Facebook');
+      return view('welcome');
     }
 }

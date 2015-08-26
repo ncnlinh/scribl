@@ -1,0 +1,125 @@
+#scribbl {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 3em;
+  color:black;
+}
+#wb {
+  color:white;
+}
+#wb-logout, #nav-menu {
+  background-color: rgba(0,0,0,0.2);
+}
+#pinboard {
+  position: relative;
+  border-style: solid;
+  border-width: 5px;
+  border-color: #008080;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKUlEQVQYV2NkIA4YMxKnjoH6ChmItZpohdR3I9Emgt1ojBSWZ6FsDDEAO/0DPTDnTssAAAAASUVORK5CYII=);
+}
+
+#noPreview, #bgnoPreview {
+  display:none;
+}
+
+#bgimageurl.placeholder {
+ text-align: center;
+}
+
+#selectableBG .ui-selecting { background: #FECA40; }
+#selectableBG .ui-selected { background: #F39814; color: white; }
+#selectableBG { padding-left: 80px; width: 800px; list-style-type: none;}
+#selectableBG li { padding: 1px; width: 200px; height: 140px; line-height: 135px; text-align: center; display: inline-block; vertical-align: middle;}
+
+#infotable td {
+  padding:2px;
+  border-spacing:5px;
+}
+#newobjtable td {
+  padding:2px;
+}
+
+.color-box {
+  display: inline-block;
+  vertical-align: middle;
+  width:22px;
+  height:22px;
+  margin:0px;
+  border: 1px solid gray;
+}
+
+input[type=range] {
+  width: 50px;
+  display: inline-table;
+  vertical-align: middle;
+}
+
+#btnSwitchBoard {
+  float: right;
+}
+
+.input-group {
+  width: 400px;
+}
+
+#loadingText {
+  z-index: -1;
+  font-size: 30px;
+  margin: auto;
+  top: 40%;
+  left: 0;
+  right: 0;
+  position:absolute;
+}
+#sidebarmenu{
+  list-style-type: none;
+  padding-left:20px;
+  margin-left: 0px;
+}
+
+#sidebarmenu li button{
+  height:  40px;
+  width:  40px;  		
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-size: 40px;
+  margin-bottom: 20px;
+  border-style:none;
+}
+#pointer{
+
+}
+#pentool{
+  background:url("../images/pen tool.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-size: 40px;
+}
+#pentool .selected{
+  background:url("../images/pen tool selected.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-size: 40px;
+}
+#eraser{
+  background:url("../images/eraser.png");
+}
+.selected{
+  background:url("../images/eraser selected.png");
+}
+#clearcanvas{
+  background:url("../images/clear canvas.png");
+}
+#undo{
+  background:url("../images/undo.png");
+}
+#redo{
+  background:url("../images/redo.png");
+}
+#uploadimages{
+  background:url("../images/upload image.png");
+}
+.thumb {
+  height: 75px;
+  border: 1px solid #000;
+  margin: 10px 5px 0 0;
+}

@@ -30,6 +30,7 @@ elixir(function(mix) {
       .copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts')
       .scripts([
         paths.jquery + '/dist/jquery.min.js',
+        paths.bootstrap + '/dist/js/bootstrap.min.js',
         paths.fabric + '/dist/fabric.min.js',
         paths.colpick + '/js/colpick.js',
         paths['jquery-ui'] + '/jquery-ui.min.js',

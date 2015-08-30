@@ -16,7 +16,8 @@ var paths = {
   'colpick': './bower_components/colpick',
   'fabric': './bower_components/fabric.js',
   'jquery': './bower_components/jquery',
-  'jquery-ui': './bower_components/jquery-ui'
+  'jquery-ui': './bower_components/jquery-ui',
+  'landing-page': './bower_components/startbootstrap-landing-page'
 
 };
 
@@ -25,9 +26,14 @@ elixir(function(mix) {
         paths.colpick + '/css/colpick.css',
         paths.bootstrap + '/dist/css/bootstrap.min.css',
         paths.bootstrap + '/dist/css/bootstrap-theme.min.css',
+        paths['landing-page'] + '/css/font-awesome.min.css',
+        'landing-page.css',
         'canvas.css'
       ], 'public/css/')
-      .copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts')
+      .copy([
+        paths.bootstrap + 'fonts/bootstrap/**',
+        paths['landing-page'] + '/font-awesome/**'
+      ], 'public/fonts')
       .scripts([
         paths.jquery + '/dist/jquery.min.js',
         paths.bootstrap + '/dist/js/bootstrap.min.js',
@@ -36,5 +42,8 @@ elixir(function(mix) {
         paths['jquery-ui'] + '/jquery-ui.min.js',
         'canvas.js'
       ], 'public/js/app.js')
-      .copy('resources/assets/images/**', 'public/images');
+      .copy([
+        'resources/assets/images/**',
+        paths['landing-page'] + '/img/**'
+      ], 'public/images');
 });

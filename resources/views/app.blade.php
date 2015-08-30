@@ -98,6 +98,7 @@
       </canvas>
     </td>
   </tr>
-  <script src="js/app.js" type="text/javascript"></script></table>
+  </table>
 </body>
+<script src="js/app.js" type="text/javascript"></script>
 </html>

@@ -9,13 +9,15 @@
 #wb-logout, #nav-menu {
   background-color: rgba(0,0,0,0.2);
 }
-#pinboard {
+#drawboard {
   position: relative;
-  border-style: solid;
+/*  border-style: solid;
   border-width: 5px;
-  border-color: #008080;
+  border-color: #008080;*/
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKUlEQVQYV2NkIA4YMxKnjoH6ChmItZpohdR3I9Emgt1ojBSWZ6FsDDEAO/0DPTDnTssAAAAASUVORK5CYII=);
 }
+
+
 
 #noPreview, #bgnoPreview {
   display:none;
@@ -70,6 +72,12 @@ input[type=range] {
   right: 0;
   position:absolute;
 }
+
+#sidebar {
+  background-color: #000000;
+  color: white; 
+}
+
 #sidebarmenu{
   list-style-type: none;
   padding-left:20px;
@@ -82,7 +90,7 @@ input[type=range] {
   background-repeat: no-repeat;
   background-size: 100%;
   background-size: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   border-style:none;
 }
 #sidebarmenu li button.highlight{
@@ -91,6 +99,11 @@ input[type=range] {
 #sidebarmenu li button.normal{
   background-color: #E9E9E9;
 }
+
+#sidebarmenu select {
+  color:black;
+}
+
 #pentool{
   background:url("../images/pen.png");
   background-repeat: no-repeat;

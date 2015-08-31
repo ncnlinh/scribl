@@ -6,13 +6,6 @@
   <link rel="stylesheet" href="/css/all.css">
 </head>
 <body>
-  <!--************************* HEADER *************************-->
-  <div id="header">
-    <div class="jumbotron">
-      <h2 id="scribbl" class="title" style="text-align: center">Welcome to Scribbl!</h2>
-    </div>
-  </div>
-  
   <!--************************* POP-UP *************************-->
   <div id="myModaltext" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -44,6 +37,8 @@
   <table><tr>
     <!--************************* BUTTONS *************************-->
     <td id = "sidebar" align="right" class="col-md-4">
+      <h2>Scribl</h2>
+      <hr>
       <ul id ="sidebarmenu" class="btn-group" data-toggle="buttons">
         <li>
           <button id = "pointer" class="btn btn-default normal" title="Select">
@@ -91,10 +86,15 @@
           <input type="color" value="#005E7A" id="drawing-color">
         </li>
       </ul>
-      
+      <br><br>
+      <a href={{url('logout')}}>
+        <button  type="button" class="fb-btn">
+            <img src="../images/FB-f-Logo__blue_29.png" />Logout
+        </button>
+      </a>
     </td>
     <!--************************* CANVAS *************************-->
-    <td id="pinboard" style="vertical-align: middle; text-align: center;">
+    <td id="drawboard" style="vertical-align: top; text-align: center;">
       <!--div dimensions must be canvas dim + border width-->
       <!--canvas id must be consistent with js script-->
       <canvas resize="true" id="canvas" width="400px" height="600px">

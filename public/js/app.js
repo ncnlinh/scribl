@@ -1295,7 +1295,7 @@ function downloadCanvas() {
 // then draws the new borders accordingly.
 function resizeCanvas() {
 	canvas.setWidth(window.innerWidth - 120 - 20 - 12);
-	canvas.setHeight(window.innerHeight - 250);
+	canvas.setHeight(window.innerHeight);
 	console.log($('sidebar').width());
 	canvas.calcOffset();
 }

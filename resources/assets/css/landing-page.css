@@ -168,3 +168,19 @@ footer {
 p.copyright {
     margin: 15px 0 0;
 }
+
+.fb-btn {
+    background-color:#3b579d;
+    border-radius:5px;
+    cursor:pointer;
+    color:#ffffff;
+}
+.fb-btn:hover {
+    background-color:#526fb5;
+    outline: none;
+}
+.fb-btn:active {
+    position:relative;
+    top:1px;
+    outline: none;
+}

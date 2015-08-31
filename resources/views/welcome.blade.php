@@ -14,17 +14,17 @@
                 height: 100%;
             }
 
-            .fb-login {
+            .fb-btn {
                 background-color:#3b579d;
                 border-radius:5px;
                 cursor:pointer;
                 color:#ffffff;
             }
-            .fb-login:hover {
+            .fb-btn:hover {
                 background-color:#526fb5;
                 outline: none;
             }
-            .fb-login:active {
+            .fb-btn:active {
                 position:relative;
                 top:1px;
                 outline: none;
@@ -104,7 +104,7 @@
                             <h3>Letting you draw on people's walls</h3>
                             <hr class="intro-divider">
                             <a href={{url('login')}}>
-                                <button type="button" class="fb-login">
+                                <button type="button" class="fb-btn">
                                     <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
                                 </button>
                             </a>
@@ -212,7 +212,7 @@
                         <h2>Start Scribling now!</h2>
                         <br>
                         <a href={{url('login')}}>
-                            <button  type="button" class="fb-login">
+                            <button  type="button" class="fb-btn">
                                 <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
                             </button>
                         </a>
@@ -259,7 +259,7 @@
 <!--
 <div class="title">Scribl</div>
 {!! link_to('login', 'Login with Facebook')!!}
-                            <div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
+                            <div class="fb-btn-button" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="false"></div>
 -->
 
 <!-- FB SDK

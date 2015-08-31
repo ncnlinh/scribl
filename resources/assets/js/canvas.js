@@ -68,12 +68,14 @@ var pointer,
 
 	addCanvasListeners();
 	addWindowListeners();
+	resizeCanvas();
 	//promptBoardEmpty();
 	initColPickers();
 	initHistory();
 
 	fabric.Object.prototype.transparentCorners = false;
-
+	fabric.Object.prototype.perPixelTargetFind = true;
+ 
 	drawingOptionsEl = $('drawing-mode-options'),
 	drawingColorEl = $('drawing-color'),
 	drawingShadowColorEl = $('drawing-shadow-color'),
@@ -350,6 +352,7 @@ function addWindowListeners() {
 			}
 		}
 	});
+	window.addEventListener('resize', resizeCanvas, false);
 	// window.onbeforeunload = function(e){	// Page-leave functionality
 	// 	if(!isSaved)
 	// 		saveCanvas(false);
@@ -451,7 +454,6 @@ function onMouseUp(ev) {
 
 
 
-
 /************************ FREEDRAW/ERASE FUNCTIONS *************************/
 function toggleDrawingMode() {
 	if (canvas.isDrawingMode) {
@@ -463,13 +465,17 @@ function toggleDrawingMode() {
 
 function drawingModeOn() {
 	eraserModeOff();
-	
+	if($("#pentool").hasClass("normal")){
+	removeHightlight();
+	$("#pentool").removeClass("normal").addClass("highlight");
+	}
 	canvas.isDrawingMode = true;
 	canvas.discardActiveObject();
 }
 
 function drawingModeOff() {
 	canvas.isDrawingMode = false;
+	
 }
 
 
@@ -484,11 +490,10 @@ function toggleEraserMode() {
 
 function eraserModeOn() {
 	drawingModeOff();
-
-	// if (!eraserTool.classList.contains("active")) {
-	// 	$('eraser').addClass("active");
-	// 	console.log(eraserTool);
-	// }
+	if($("#eraser").hasClass("normal")){
+	removeHightlight();
+	$("#eraser").removeClass("normal").addClass("highlight");
+	}
 
 	inEraserMode = true;
 	canvas.defaultCursor = 'cell';
@@ -500,12 +505,9 @@ function eraserModeOn() {
 	});
 }
 
-function eraserModeOff() {
-	inEraserMode = false;
-
-	// if (eraserTool.classList.contains("active")) {
-	// 	$('eraser').removeClass("active");
-	// }
+	function eraserModeOff() {
+		inEraserMode = false;
+		
 
 	canvas.defaultCursor = 'default';
 
@@ -518,6 +520,10 @@ function eraserModeOff() {
 function disableDrawAndEraser() {
 	drawingModeOff();
 	eraserModeOff();
+	if($("#pointer").hasClass("normal")){
+	removeHightlight();
+	$("#pointer").removeClass("normal").addClass("highlight");
+	}
 }
 
 var erasing = false;
@@ -540,7 +546,7 @@ function erase(ev) {
 function removeIfPath(ev) {
 	var mouseEv = ev.e;
 	var target = canvas.findTarget(mouseEv, true);
-	console.log(target);
+	// console.log(target);
 	// if (target !== undefined && target.type == "path") {
 	// 	var cursorPt = new fabric.Point(mouseEv.x, mouseEv.y);
 	// 	console.log(target.getLocalPointer(ev.e, cursorPt));
@@ -681,6 +687,7 @@ function deleteActiveObj() {
 }
 
 function downloadCanvas() {
+	removeHightlight();
 	// Normally transparent because default dataURL is .png
 	var currBgCol = canvas.backgroundColor;
 	var currBgImg = canvas.backgroundImage;
@@ -702,6 +709,27 @@ function downloadCanvas() {
 	else
 		canvas.setBackgroundColor(null);
 	canvas.renderAll();
+	changeHighlight();
+}
+
+/** RESIZE CODE FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/
+// Display custom canvas.
+// In this case it's a blue, 5 pixel border that 
+// resizes along with the browser window.					
+// function redraw() {
+// 	context.strokeStyle = 'blue';
+// 	context.lineWidth = '5';
+// 	context.strokeRect(0, 0, window.innerWidth, window.innerHeight);
+// }
+
+// Runs each time the DOM window resize event fires.
+// Resets the canvas dimensions to match window,
+// then draws the new borders accordingly.
+function resizeCanvas() {
+	canvas.setWidth(window.innerWidth - 120 - 20 - 12);
+	canvas.setHeight(window.innerHeight - 250);
+	console.log($('sidebar').width());
+	canvas.calcOffset();
 }
 
 
@@ -745,37 +773,58 @@ function updateHistory() {
 	histList.push(JSON.stringify(canvas));
 }
 
-function undo() {
-	// Only run if history is not busy
-	if(!histWorking) {
-		if (histIndex>0) {
-			// Tell updateHistory to ignore actions
-			histWorking = true;
-			// Callback ensures no other history can run before completion
-			canvas.loadFromJSON(histList[--histIndex], function() {
-				canvas.renderAll();
-				histWorking = false;
-			});
-			
-		}
-	}
-}
+	function undo() {
+		// Only run if history is not busy
+		if(!histWorking) {
+			if (histIndex>0) {
+				// Tell updateHistory to ignore actions
+				histWorking = true;
+				// Callback ensures no other history can run before completion
+				canvas.loadFromJSON(histList[--histIndex], function() {
+					canvas.renderAll();
+					histWorking = false;
+				});
 
-function redo() {
-	// Only run if history is not busy
-	if(!histWorking) {
-		histLast = histList.length - 1;
-		if (histIndex<histLast) {
-			// Tell updateHistory to ignore actions
-			histWorking = true;
-			// Callback ensures no other history can run before completion
-			canvas.loadFromJSON(histList[++histIndex], function() {
-				canvas.renderAll();
-				histWorking = false;
-			});
+			}
 		}
 	}
-}
+
+	function removeHightlight(){
+		$("#sidebarmenu").find(":button").each(function(){
+			if($(this).hasClass("highlight")){
+				$(this).removeClass("highlight").addClass("normal");
+			}			
+		})
+		
+	}
+
+	// function changeHighlight(){
+	// 		if(canvas.isDrawingMode && $("#pentool").hasClass("normal")){
+	// 		$("#pentool").removeClass("normal").addClass("highlight");
+	// 		}
+	// 		else if(inEraserMode && $("#eraser").hasClass("normal")){
+	// 		$("#eraser").removeClass("normal").addClass("highlight");
+	// 		}
+	// 		else{
+	// 		$("#pointer").removeClass("normal").addClass("highlight");
+	// 		}
+	// }
+
+	function redo() {
+		// Only run if history is not busy
+		if(!histWorking) {
+			histLast = histList.length - 1;
+			if (histIndex<histLast) {
+				// Tell updateHistory to ignore actions
+				histWorking = true;
+				// Callback ensures no other history can run before completion
+				canvas.loadFromJSON(histList[++histIndex], function() {
+					canvas.renderAll();
+					histWorking = false;
+				});
+			}
+		}
+	}
 
 
 
@@ -848,12 +897,12 @@ function saveCanvas(wAlert){
 	// 	alert("Successfully saved!");
 	// isSaved = true;
 }
-function clearCanvas(){
-	var resp=confirm("Are you sure? This will clear everything!");
-	if (resp){
-		canvas.clear();
+	function clearCanvas(){
+		var resp=confirm("Are you sure? This will clear everything!");
+		if (resp){
+			canvas.clear();
+		}
 	}
-}
 
 
 

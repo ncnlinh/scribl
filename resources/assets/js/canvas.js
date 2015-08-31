@@ -1,3 +1,19 @@
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '1054942174524456',
+    status     : true,
+    xfbml      : true,
+    version    : 'v2.4'
+  });
+};
+
+(function(d, s, id){
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(s); js.id = id;
+   js.src = "//connect.facebook.net/en_US/sdk.js";
+   fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
 
 /************************ PAGE INITIALISATION *************************/
 $(function(){
@@ -65,6 +81,8 @@ var pointer,
 		isDrawingMode: true,
 		selection: false
 	});
+	canvas.setWidth(window.innerWidth-200);
+	canvas.setHeight(window.innerHeight-100);
 
 	addCanvasListeners();
 	addWindowListeners();
@@ -100,6 +118,8 @@ var pointer,
 	italicBtn       = $('textItalic');
 	underlineBtn    = $('textUnderline');
 
+	postOnFb = $('postOnFacebook');
+
 	pointer.onclick 		= disableDrawAndEraser;
 	penTool.onclick 		= drawingModeOn;
 	eraserTool.onclick 		= eraserModeOn;
@@ -112,6 +132,7 @@ var pointer,
 	boldBtn.onclick 		= toggleTextBold;
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
+	postOnFb.onclick = postOnFacebook;
 
 	if (fabric.PatternBrush) {
 		var vLinePatternBrush = new fabric.PatternBrush(canvas);
@@ -747,6 +768,22 @@ function resizeCanvas() {
 	canvas.calcOffset();
 }
 
+
+function postOnFacebook() {
+	$.post('/facebook/post', {
+		'_token': $('meta[name=csrf-token]').attr('content'),
+		'message': 'Hi',
+		'data': canvas.toDataURL()
+	}
+	).done(function(response) {
+		if (response == "(#200) Requires extended permission: publish_actions" ||
+			response == "require_publish_actions") {
+			console.log('hi');
+			FB.login(function(response){
+			}, {scope: 'publish_actions'});
+		} 
+	});
+}
 
 
 

@@ -2,10 +2,13 @@
 <html>
 <head>
   <meta charset="utf-8">
+
+  <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Scribl!</title>
   <link rel="stylesheet" href="/css/all.css">
 </head>
 <body>
+
   <!--************************* POP-UP *************************-->
   <div id="myModaltext" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -34,8 +37,9 @@
     </div>
   </div>
   <!--************************* DRAWING AREA *************************-->
-  <table><tr>
+  <table class="content"><tr>
     <!--************************* BUTTONS *************************-->
+
     <td id = "sidebar" align="right" class="col-md-4">
       <h2>Scribl</h2>
       <hr>
@@ -97,12 +101,12 @@
     <td id="drawboard" style="vertical-align: top; text-align: center;">
       <!--div dimensions must be canvas dim + border width-->
       <!--canvas id must be consistent with js script-->
-      <canvas resize="true" id="canvas" width="400px" height="600px">
+      <canvas resize="true" id="canvas" width="800px" height="600px">
         This text is displayed if your browser does not support HTML5 Canvas.
       </canvas>
+      <button type="button" id="postOnFacebook" class="btn btn-primary">Send</button>
     </td>
   </tr>
-  </table>
+  <script src="js/app.js" type="text/javascript"></script></table>
 </body>
-<script src="js/app.js" type="text/javascript"></script>
 </html>

@@ -5,6 +5,7 @@ use Illuminate\Contracts\Auth\Guard as Authenticator;
 use Laravel\Socialite\Contracts\Factory as Socialite;
 use App\Repositories\UserRepository;
 use App\AuthenticateUserListener;
+use Session;
 
 class AuthenticateUser{
 
@@ -39,6 +40,8 @@ class AuthenticateUser{
   }
 
   private function getFacebookUser() {
-    return $this->socialite->driver('facebook')->user();
+    $fbUser = $this->socialite->driver('facebook')->user();
+    Session::set('FACEBOOK_SESSION_TOKEN', $fbUser->token);
+    return $fbUser;
   }
 }

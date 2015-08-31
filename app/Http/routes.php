@@ -18,3 +18,5 @@ Route::get('welcome', 'AppController@welcome');
 Route::get('login', 'AuthController@login'); 
 
 Route::get('logout', 'AuthController@logout');
+
+Route::post('facebook/post', 'FacebookController@post');

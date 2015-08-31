@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Scribbl!</title>
+  <title>Scribl!</title>
   <link rel="stylesheet" href="/css/all.css">
 </head>
 <body>
@@ -46,11 +46,11 @@
     <td id = "sidebar" align="right" class="col-md-4">
       <ul id ="sidebarmenu" class="btn-group" data-toggle="buttons">
         <li>
-          <button id = "pointer" class="btn btn-default normal">
+          <button id = "pointer" class="btn btn-default normal" title="Select">
           </button>
         </li>
         <li><div class="dropdown">
-          <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown"></button>
+          <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown" title="Draw"></button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="left: 0px; top: 40px">
             <li role="presentation">
               <label for="drawing-line-width">Line width:</label>
@@ -66,19 +66,19 @@
         
           </div>
         </li>
-        <li><button id = "eraser" class="btn btn-primary normal"></button>
+        <li><button id = "eraser" class="btn btn-primary normal" title="Erase"></button>
         </li>
-        <li><button id = "clearcanvas" class="btn btn-primary normal"></button>
+        <li><button id = "clearcanvas" class="btn btn-primary normal" title="Clear"></button>
         </li> 
-        <li><button id = "undo" class="btn btn-primary normal"></button>
+        <li><button id = "undo" class="btn btn-primary normal" title="Undo"></button>
         </li>
-        <li><button id = "redo" class="btn btn-primary normal"></button>
+        <li><button id = "redo" class="btn btn-primary normal" title="Redo"></button>
         </li>
-        <li><button id = "uploadimages" class="btn btn-primary normal"></button>
+        <li><button id = "uploadimages" class="btn btn-primary normal" title="Insert Image"></button>
         </li>
-        <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext">text</button>
+        <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext" title="Insert Text">text</button>
         </li>
-        <li><button id = "download" class="btn btn-primary normal">DL</button>
+        <li><button id = "download" class="btn btn-primary normal" title="Download Scribl">DL</button>
         </li> 
         <li>
           <label for="drawing-mode-selector">Pen Mode:</label><br>

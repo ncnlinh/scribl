@@ -685,29 +685,32 @@ input[type=range] {
   margin-bottom: 20px;
   border-style:none;
 }
-#pointer{
-
+#sidebarmenu li button.highlight{
+  background-color: #FFAF47;
+}
+#sidebarmenu li button.normal{
+  background-color: #E9E9E9;
 }
 #pentool{
-  background:url("../images/pen tool.png");
+  background:url("../images/pen.png");
   background-repeat: no-repeat;
   background-size: 100%;
   background-size: 40px;
+  
 }
-#pentool .selected{
-  background:url("../images/pen tool selected.png");
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-size: 40px;
+#pentool.highlight{
+  background-color: #FFAF47;
 }
+#pentool.normal{
+  background-color: #E9E9E9;
+}
+
 #eraser{
   background:url("../images/eraser.png");
 }
-.selected{
-  background:url("../images/eraser selected.png");
-}
+
 #clearcanvas{
-  background:url("../images/clear canvas.png");
+  background:url("../images/clear.png");
 }
 #undo{
   background:url("../images/undo.png");
@@ -716,7 +719,13 @@ input[type=range] {
   background:url("../images/redo.png");
 }
 #uploadimages{
-  background:url("../images/upload image.png");
+  background:url("../images/import image.png");
+}
+#download{
+  background:url("../images/export.png");
+}
+#pointer{
+  background:url("../images/select.png");
 }
 .thumb {
   height: 75px;

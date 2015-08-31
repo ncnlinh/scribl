@@ -628,7 +628,6 @@ var pointer,
 
 	fabric.Object.prototype.transparentCorners = false;
 	fabric.Object.prototype.perPixelTargetFind = true;
- 
 	drawingOptionsEl = $('drawing-mode-options'),
 	drawingColorEl = $('drawing-color'),
 	drawingShadowColorEl = $('drawing-shadow-color'),
@@ -650,6 +649,9 @@ var pointer,
 	uploadButton 	= $('uploadimages');
 	textInput 		= $('inputtext');
 	downloadEl 		= $('download');
+	boldBtn         = $('textBold');
+	italicBtn       = $('textItalic');
+	underlineBtn    = $('textUnderline');
 
 	pointer.onclick 		= disableDrawAndEraser;
 	penTool.onclick 		= drawingModeOn;
@@ -660,6 +662,9 @@ var pointer,
 	uploadButton.onclick 	= openUploader;
 	textInput.onclick 		= addText;
 	downloadEl.onclick 		= downloadCanvas;
+	boldBtn.onclick 		= toggleTextBold;
+	italicBtn.onclick 		= toggleTextItalic;
+	underlineBtn.onclick 	= toggleTextUnderline;
 
 	if (fabric.PatternBrush) {
 		var vLinePatternBrush = new fabric.PatternBrush(canvas);
@@ -1079,6 +1084,16 @@ function disableDrawAndEraser() {
 	}
 }
 
+	function removeHightlight(){
+		$("#sidebarmenu").find(":button").each(function(){
+			if($(this).hasClass("highlight")){
+				$(this).removeClass("highlight").addClass("normal");
+			}			
+		})
+		
+	}
+
+
 var erasing = false;
 function erase(ev) {
 	switch(ev.e.type.toLowerCase()) {
@@ -1477,7 +1492,15 @@ function setDefSettings(curr){	// *** consider adding these features to toJSON(o
 	else
 		curr.set({minScaleLimit: 10.0/curr.width});
 }
+
+
+var isTextBold = false;
+var isTextItalic = false;
+var isTextUnderline = false;
+
 function addText() {
+
+
 	disableDrawAndEraser();
 
 	var input = document.getElementById("textinput");
@@ -1491,9 +1514,83 @@ function addText() {
 	newText.set("top", canvas.getHeight()/2);
 	setDefSettings(newText);
 
+	if(isTextBold){
+		var boldProperty = newText.getSelectionStyles()['fontWeight'] || '';
+		var value = boldProperty.indexOf('bold') > -1 ? 
+		boldProperty.replace('bold', '')
+		: (boldProperty + ' bold');
+		newText.set('fontWeight',value).setCoords();
+	}
+	if(isTextItalic){
+		var italicProperty = newText.getSelectionStyles()['fontStyle'] || '';
+		var value = italicProperty.indexOf('bold') > -1 ? 
+		italicProperty.replace('italic', '')
+		: (italicProperty + ' italic');
+		newText.set('fontStyle',value).setCoords();
+	}
+	if(isTextUnderline){
+		var underlineProperty = newText.getSelectionStyles()['textDecoration'] || '';
+		var value = underlineProperty.indexOf('underline') > -1 ? 
+		underlineProperty.replace('underline', '')
+		: (underlineProperty + ' underline');
+		newText.set('textDecoration',value).setCoords();
+	}
 	canvas.add(newText);
 	canvas.setActiveObject(canvasLastObj());
 	isSaved = false;
+
+	clearText();
+}
+
+function clearText(){
+		isTextBold = false;
+    isTextItalic = false;
+    isTextUnderline = false;
+
+    if($("#textBold").hasClass("btn btn-success")){
+    	$("#textBold").removeClass("btn btn-success").addClass("btn btn-default");
+    }
+   if($("#textItalic").hasClass("btn btn-success")){
+    	$("#textItalic").removeClass("btn btn-success").addClass("btn btn-default");
+    }
+   if($("#textUnderline").hasClass("btn btn-success")){
+    	$("#textUnderline").removeClass("btn btn-success").addClass("btn btn-default");
+    }
+
+    $("#textinput").value ="";
+}
+
+function toggleTextBold(){
+	if(isTextBold){
+		isTextBold = false;
+		$("#textBold").removeClass("btn btn-success").addClass("btn btn-default");
+	}else{
+		isTextBold = true;
+		$("#textBold").removeClass("btn btn-default").addClass("btn btn-success");
+	}
+	
+}
+
+function toggleTextItalic(){
+	if(isTextItalic){
+		isTextItalic = false;
+		$("#textItalic").removeClass("btn btn-success").addClass("btn btn-default");
+	}else{
+		isTextItalic = true;
+		$("#textItalic").removeClass("btn btn-default").addClass("btn btn-success");
+	}
+	
+}
+
+function toggleTextUnderline(){
+	if(isTextUnderline){
+		isTextUnderline = false;
+		$("#textUnderline").removeClass("btn btn-success").addClass("btn btn-default");
+	}else{
+		isTextUnderline = true;
+		$("#textUnderline").removeClass("btn btn-default").addClass("btn btn-success");
+	}
+	
 }
 
 // IMAGE FUNCTIONS

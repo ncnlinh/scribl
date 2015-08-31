@@ -22,10 +22,12 @@
             }
             .fb-login:hover {
                 background-color:#526fb5;
+                outline: none;
             }
             .fb-login:active {
                 position:relative;
                 top:1px;
+                outline: none;
             }
 
 /*            body {
@@ -101,10 +103,11 @@
                             <h1>Scribl</h1>
                             <h3>Letting you draw on people's walls</h3>
                             <hr class="intro-divider">
-
-                            <button href="{{ link_to('login') }}" type="button" class="fb-login">
-                                <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
-                            </button>
+                            <a href={{url('login')}}>
+                                <button type="button" class="fb-login">
+                                    <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -208,9 +211,11 @@
                     <div class="col-lg-12" style="text-align: center">
                         <h2>Start Scribling now!</h2>
                         <br>
-                        <button href="{{ link_to('login') }}" type="button" class="fb-login">
-                            <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
-                        </button>
+                        <a href={{url('login')}}>
+                            <button  type="button" class="fb-login">
+                                <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
+                            </button>
+                        </a>
                     </div>
                 </div>
 

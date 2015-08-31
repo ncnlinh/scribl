@@ -24,6 +24,11 @@
           <h4 class="modal-title">Input the text</h4>
         </div>
         <div class="modal-body">
+          <div>
+          <button id = "textBold" class = "btn btn-default">bold</button>
+          <button id = "textItalic" class = "btn btn-default">italic</button>
+          <button id = "textUnderline" class = "btn btn-default">underline</button>
+          </div>
           <input id="textinput" name="files[]" multiple />
           <output id="list"></output>
         </div>
@@ -41,12 +46,11 @@
     <td id = "sidebar" align="right" class="col-md-4">
       <ul id ="sidebarmenu" class="btn-group" data-toggle="buttons">
         <li>
-          <button id = "pointer" class="btn btn-default">
-          <span class="glyphicon glyphicon-move" aria-hidden="true"></span>
+          <button id = "pointer" class="btn btn-default normal">
           </button>
         </li>
         <li><div class="dropdown">
-          <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active" data-toggle="dropdown"></button>
+          <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown"></button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="left: 0px; top: 40px">
             <li role="presentation">
               <label for="drawing-line-width">Line width:</label>
@@ -62,19 +66,19 @@
         
           </div>
         </li>
-        <li><button id = "eraser" class="btn btn-primary"></button>
+        <li><button id = "eraser" class="btn btn-primary normal"></button>
         </li>
-        <li><button id = "clearcanvas" class="btn btn-primary"></button>
+        <li><button id = "clearcanvas" class="btn btn-primary normal"></button>
         </li> 
-        <li><button id = "undo" class="btn btn-primary"></button>
+        <li><button id = "undo" class="btn btn-primary normal"></button>
         </li>
-        <li><button id = "redo" class="btn btn-primary"></button>
+        <li><button id = "redo" class="btn btn-primary normal"></button>
         </li>
-        <li><button id = "uploadimages" class="btn btn-primary"></button>
+        <li><button id = "uploadimages" class="btn btn-primary normal"></button>
         </li>
-        <li><button id = "text" class="btn btn-primary" data-toggle="modal" data-target="#myModaltext">text</button>
+        <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext">text</button>
         </li>
-        <li><button id = "download" class="btn btn-primary">DL</button>
+        <li><button id = "download" class="btn btn-primary normal">DL</button>
         </li> 
         <li>
           <label for="drawing-mode-selector">Pen Mode:</label><br>

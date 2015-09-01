@@ -57,7 +57,10 @@
                 <span class="info">22</span><input type="range" value="30" min="0" max="150" id="drawing-line-width"><br>
               </li>
               <li role="presentation" class="divider"></li>
-              <li role="presentation" class="dropdown-header">Dropdown header 2</li>
+              <li role="presentation" class="dropdown-header">
+                <label for="drawing-col">Line color:</label>
+                <span class="color-box" id="drawing-col" />
+              </li>
             </ul>
             </div>
           </li>
@@ -76,14 +79,12 @@
           <li><button id = "download" class="btn btn-primary normal" title="Download Scribl">DL</button>
           </li> 
           <li>
-            <label for="drawing-mode-selector">Pen Mode:</label><br>
+            <label for="drawing-mode-selector" style="color:white">Pen Mode:</label><br>
             <select id="drawing-mode-selector">
               <option>Pencil</option>
               <option>Circle</option>
               <option>Spray</option>
             </select><br>
-            <label for="drawing-color">Line color:</label><br>
-            <input type="color" value="#005E7A" id="drawing-color">
           </li>
         </ul>
         <br><br>

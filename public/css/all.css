@@ -693,14 +693,15 @@ input[type=range] {
 
 #sidebar {
   background-color: #000000;
-  color: white; 
 }
 
 #title {
   margin-bottom: 0px;
+  color:white;
 }
 #titleline {
   margin-top: 4px;
+  color:white;
 }
 
 #sidebarcontent {

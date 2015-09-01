@@ -38,7 +38,7 @@ if (window.location.href.indexOf('#_=_') > 0) {
 var canvas;
 var bgselected;				// Image ID setter for background
 var fntcolor = '#000000';	// Colour setter for new text
-var blkcolor = '#FFFFFF';	// Colour setter for new block
+var drawcolor = '#FF8B17';	// Colour setter for new block
 var orig;					// Holds last selected/modified object (for clone)
 var atLimit;				// Holds last acceptable position
 var lastSave;				// Holds last save state (for undo)
@@ -94,7 +94,7 @@ var pointer,
 	fabric.Object.prototype.transparentCorners = false;
 	fabric.Object.prototype.perPixelTargetFind = true;
 	drawingOptionsEl = $('drawing-mode-options'),
-	drawingColorEl = $('drawing-color'),
+	// drawingColorEl = $('drawing-color'),
 	drawingShadowColorEl = $('drawing-shadow-color'),
 	drawingLineWidthEl = $('drawing-line-width'),
 	drawingShadowWidth = $('drawing-shadow-width'),
@@ -134,6 +134,7 @@ var pointer,
 	underlineBtn.onclick 	= toggleTextUnderline;
 	postOnFb.onclick = postOnFacebook;
 
+	// TODO: CONSIDER REMOVING PATTERN BRUSH
 	if (fabric.PatternBrush) {
 		var vLinePatternBrush = new fabric.PatternBrush(canvas);
 		vLinePatternBrush.getPatternSrc = function() {
@@ -238,14 +239,14 @@ var pointer,
 		}
 
 		if (canvas.freeDrawingBrush) {
-			canvas.freeDrawingBrush.color = drawingColorEl.value;
+			canvas.freeDrawingBrush.color = drawcolor;
 			canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
 		}
 	};
 
-	drawingColorEl.onchange = function() {
-		canvas.freeDrawingBrush.color = this.value;
-	};
+	// drawingColorEl.onchange = function() {
+	// 	canvas.freeDrawingBrush.color = this.value;
+	// };
 	drawingLineWidthEl.onchange = function() {
 		canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
 		this.previousSibling.innerHTML = this.value;
@@ -253,105 +254,26 @@ var pointer,
 
 
 	if (canvas.freeDrawingBrush) {
-		canvas.freeDrawingBrush.color = drawingColorEl.value;
+		canvas.freeDrawingBrush.color = drawcolor;
 		canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
 		canvas.freeDrawingBrush.shadowBlur = 0;
 	}
 })();
 
+
 function initColPickers(){
 	// Initialise Colour Pickers
-	// For the time being repetitive because i can't get the loop counter [i] into the onchange function
-	var bgColor = '#123456';
-	$('#canvasBGCol').colpick({
+	$('#drawing-col').colpick({
 		colorScheme:'dark',
 		layout:'hex',
 		submit:0,
-		color: bgColor,
+		color: drawcolor,
 		onChange:function(hsb,hex,rgb,el,bySetColor) {
 			$(el).css('background-color','#'+hex);
-			if(!bySetColor){
-				canvas.backgroundColor='#'+hex;
-				canvas.renderAll();
-				isSaved=false;
-			}
+			drawcolor = '#'+hex;
+			canvas.freeDrawingBrush.color = drawcolor;
 		}
-	}).css('background-color', bgColor);
-	$('#backgroundColor').colpick({
-		colorScheme:'dark',
-		layout:'hex',
-		submit:0,
-		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$(el).css('background-color','#'+hex);
-			if(!bySetColor){
-				setActiveProp("backgroundColor", '#'+hex);
-			}
-		}
-	});
-	$('#textBackgroundColor').colpick({
-		colorScheme:'dark',
-		layout:'hex',
-		submit:0,
-		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$(el).css('background-color','#'+hex);
-			if(!bySetColor){
-				setActiveStyle("textBackgroundColor", '#'+hex);
-			}
-		}
-	});
-	$('#btntextColor').colpick({
-		colorScheme:'dark',
-		layout:'hex',
-		submit:0,
-		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$('#textColor').css('background-color','#'+hex);
-			if(!bySetColor){
-				setActiveStyle("fill", '#'+hex);
-			}
-		}
-	});
-	$('#stroke').colpick({
-		colorScheme:'dark',
-		layout:'hex',
-		submit:0,
-		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$(el).css('background-color','#'+hex);
-			if(!bySetColor){
-				setActiveStyle("stroke", '#'+hex);
-			}
-		}
-	});
-	$('#fillColor').colpick({
-		colorScheme:'dark',
-		layout:'hex',
-		submit:0,
-		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$(el).css('background-color','#'+hex);
-			if(!bySetColor){
-				setActiveStyle("fill", '#'+hex);
-			}
-		}
-	});
-	$('#newtextcolor').colpick({
-		colorScheme:'dark',
-		layout:'hex',
-		submit:0,
-		color: '000000',
-		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$(el).css('background-color','#'+hex);
-			fntcolor = '#'+hex;
-		}
-	}).css('background-color', '#000000');
-	$('#newblkcol').colpick({
-		colorScheme:'dark',
-		layout:'hex',
-		submit:0,
-		color: 'ffffff',
-		onChange:function(hsb,hex,rgb,el,bySetColor) {
-			$(el).css('background-color','#'+hex);
-			blkcolor = '#'+hex;
-		}
-	}).css('background-color', '#ffffff');
+	}).css('background-color', drawcolor);
 }
 
 

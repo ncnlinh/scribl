@@ -618,6 +618,10 @@ p.copyright {
     top:1px;
     outline: none;
 }
+body {
+  overflow: hidden;
+}
+
 #scribbl {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 3em;
@@ -771,6 +775,12 @@ input[type=range] {
 }
 #pointer{
   background:url("../images/select.png");
+}
+#postOnFacebook{
+  position: absolute;
+  right: 0;
+  margin-top: -40px;
+  margin-right: 20px; 
 }
 .thumb {
   height: 75px;

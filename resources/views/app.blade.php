@@ -2,10 +2,13 @@
 <html>
 <head>
   <meta charset="utf-8">
+
+  <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Scribl!</title>
   <link rel="stylesheet" href="/css/all.css">
 </head>
 <body>
+
   <!--************************* POP-UP *************************-->
   <div id="myModaltext" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -34,7 +37,7 @@
     </div>
   </div>
   <!--************************* DRAWING AREA *************************-->
-  <table><tr>
+  <table class="content"><tr>
     <!--************************* BUTTONS *************************-->
     <td id = "sidebar" align="right">
       <div id="sidebarcontent">
@@ -45,7 +48,8 @@
             <button id = "pointer" class="btn btn-default normal" title="Select">
             </button>
           </li>
-          <li><div class="dropdown">
+          <li>
+            <div class="dropdown">
             <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown" title="Draw"></button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="left: 0px; top: 40px">
               <li role="presentation">
@@ -54,12 +58,7 @@
               </li>
               <li role="presentation" class="divider"></li>
               <li role="presentation" class="dropdown-header">Dropdown header 2</li>
-
-              <li role="presentation">  
-                
-              </li>
             </ul>
-          
             </div>
           </li>
           <li><button id = "eraser" class="btn btn-primary normal" title="Erase"></button>
@@ -99,12 +98,12 @@
     <td id="drawboard" style="vertical-align: top; text-align: center;">
       <!--div dimensions must be canvas dim + border width-->
       <!--canvas id must be consistent with js script-->
-      <canvas resize="true" id="canvas" width="400px" height="600px">
+      <canvas resize="true" id="canvas" width="800px" height="600px">
         This text is displayed if your browser does not support HTML5 Canvas.
       </canvas>
+      <button type="button" id="postOnFacebook" class="btn btn-primary">Send</button>
     </td>
   </tr>
-  </table>
+  <script src="js/app.js" type="text/javascript"></script></table>
 </body>
-<script src="js/app.js" type="text/javascript"></script>
 </html>

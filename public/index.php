@@ -7,6 +7,8 @@
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -56,3 +58,5 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
+
+

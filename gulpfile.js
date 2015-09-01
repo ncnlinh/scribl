@@ -35,7 +35,6 @@ elixir(function(mix) {
         paths['landing-page'] + '/font-awesome/**'
       ], 'public/fonts')
       .scripts([
-        'facebook-init.js',
         paths.jquery + '/dist/jquery.min.js',
         paths.bootstrap + '/dist/js/bootstrap.min.js',
         paths.fabric + '/dist/fabric.min.js',

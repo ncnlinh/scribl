@@ -925,10 +925,10 @@ function addWindowListeners() {
 			}
 		} else {
 			switch(e.which) {
-				// case 8: // backspace
-				// e.keyCode=0;
-				// Event.stop(e);
-				// break;
+				case 8: // backspace
+				if (!canvas.isDrawingMode && !inEraserMode)
+					e.preventDefault();
+				break;
 				case 46: // del
 				deleteActiveObj();
 				break;

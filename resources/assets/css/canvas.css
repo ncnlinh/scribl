@@ -1,7 +1,3 @@
-body {
-  overflow: hidden;
-}
-
 #scribbl {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 3em;
@@ -20,8 +16,6 @@ body {
   border-color: #008080;*/
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKUlEQVQYV2NkIA4YMxKnjoH6ChmItZpohdR3I9Emgt1ojBSWZ6FsDDEAO/0DPTDnTssAAAAASUVORK5CYII=);
 }
-
-
 
 #noPreview, #bgnoPreview {
   display:none;

@@ -36,9 +36,9 @@ class FacebookController extends Controller
       try {
         $response = $this->fb->get('/me/permissions', $this->session);
       } catch(Facebook\Exceptions\FacebookResponseException $e) {
-        return $e->getMessage();
+        return $e->getCode();
       } catch(Facebook\Exceptions\FacebookSDKException $e) {
-        return 'Facebook SDK returned an error: ' . $e->getMessage();
+        return 'Facebook SDK returned an error: ' . $e->getCode();
       }
 
       $permissions = $response->getGraphEdge();
@@ -72,9 +72,9 @@ class FacebookController extends Controller
         // Returns a `Facebook\FacebookResponse` object
         $response = $this->fb->post('/me/photos', $data, $this->session);
       } catch(Facebook\Exceptions\FacebookResponseException $e) {
-        return $e->getMessage();
+        return $e->getCode();
       } catch(Facebook\Exceptions\FacebookSDKException $e) {
-        return 'Facebook SDK returned an error: ' . $e->getMessage();
+        return 'Facebook SDK returned an error: ' . $e->getCode();
       }
 
       $graphNode = $response->getGraphNode();

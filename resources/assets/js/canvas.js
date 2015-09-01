@@ -1,6 +1,6 @@
 window.fbAsyncInit = function() {
   FB.init({
-    appId      : '1054942174524456',
+    appId      : '1480631925592204',
     status     : true,
     xfbml      : true,
     version    : 'v2.4'
@@ -688,11 +688,12 @@ function postOnFacebook() {
 		'data': canvas.toDataURL()
 	}
 	).done(function(response) {
-		if (response == "(#200) Requires extended permission: publish_actions" ||
+		if (response == "200" ||
 			response == "require_publish_actions") {
 			console.log('hi');
 			FB.login(function(response){
 			}, {scope: 'publish_actions'});
+			
 		} 
 	});
 }

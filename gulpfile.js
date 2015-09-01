@@ -26,7 +26,7 @@ elixir(function(mix) {
         paths.colpick + '/css/colpick.css',
         paths.bootstrap + '/dist/css/bootstrap.min.css',
         paths.bootstrap + '/dist/css/bootstrap-theme.min.css',
-        paths['landing-page'] + '/css/font-awesome.min.css',
+        paths['landing-page'] + '/font-awesome/css/font-awesome.min.css',
         'landing-page.css',
         'canvas.css'
       ], 'public/css/')

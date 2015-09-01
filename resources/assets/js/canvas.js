@@ -351,6 +351,10 @@ function addWindowListeners() {
 			}
 		} else {
 			switch(e.which) {
+				// case 8: // backspace
+				// e.keyCode=0;
+				// Event.stop(e);
+				// break;
 				case 46: // del
 				deleteActiveObj();
 				break;
@@ -387,7 +391,7 @@ function onObjAdded(e) {
 		// is loaded from a save. This section of code is a workaround
 		// to ensure that brush strokes are not selectable.
 		var curr = canvasLastObj();
-		if (curr.type == "path")
+		if (curr.type == "path" || curr.type == "group")
 			setLastObjUnselectable();
 	} else {
 		updateHistory();
@@ -510,14 +514,13 @@ function eraserModeOn() {
 	});
 }
 
-	function eraserModeOff() {
-		inEraserMode = false;
+function eraserModeOff() {
+	inEraserMode = false;
 		
-
 	canvas.defaultCursor = 'default';
 
 	canvas.forEachObject(function(o) {
-		if(o.type !== 'path')
+		if(o.type !== 'path' && o.type !== 'group')
 			o.selectable = true;
 	});
 }
@@ -531,14 +534,14 @@ function disableDrawAndEraser() {
 	}
 }
 
-	function removeHightlight(){
-		$("#sidebarmenu").find(":button").each(function(){
-			if($(this).hasClass("highlight")){
-				$(this).removeClass("highlight").addClass("normal");
-			}			
-		})
-		
-	}
+function removeHightlight(){
+	$("#sidebarmenu").find(":button").each(function(){
+		if($(this).hasClass("highlight")){
+			$(this).removeClass("highlight").addClass("normal");
+		}			
+	})
+	
+}
 
 
 var erasing = false;
@@ -561,19 +564,7 @@ function erase(ev) {
 function removeIfPath(ev) {
 	var mouseEv = ev.e;
 	var target = canvas.findTarget(mouseEv, true);
-	// console.log(target);
-	// if (target !== undefined && target.type == "path") {
-	// 	var cursorPt = new fabric.Point(mouseEv.x, mouseEv.y);
-	// 	console.log(target.getLocalPointer(ev.e, cursorPt));
-	// 	var test = target.getLocalPointer(ev.e, cursorPt);
-	// 	if(target.containsPoint(test)) {
-	// 		console.log("hit");
-	// 		canvas.remove(target);
-	// 		updateHistory();
-	// 	}
-	// }
-	// TODO: Improve to only erase on collision
-	if (target !== undefined && target.type == "path") {
+	if (target !== undefined && (target.type == "path" || target.type == "group")) {
 		canvas.remove(target);
 	}
 }
@@ -741,9 +732,8 @@ function downloadCanvas() {
 // Resets the canvas dimensions to match window,
 // then draws the new borders accordingly.
 function resizeCanvas() {
-	canvas.setWidth(window.innerWidth - 120 - 20 - 12);
+	canvas.setWidth(window.innerWidth - $('#sidebar').width());
 	canvas.setHeight(window.innerHeight);
-	console.log($('sidebar').width());
 	canvas.calcOffset();
 }
 

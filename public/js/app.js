@@ -646,6 +646,9 @@ var pointer,
 
 	fabric.Object.prototype.transparentCorners = false;
 	fabric.Object.prototype.perPixelTargetFind = true;
+	fabric.Text.prototype.perPixelTargetFind = false;
+	fabric.Image.prototype.perPixelTargetFind = false;
+
 	drawingOptionsEl = $('drawing-mode-options'),
 	// drawingColorEl = $('drawing-color'),
 	drawingShadowColorEl = $('drawing-shadow-color'),
@@ -1257,7 +1260,26 @@ function postOnFacebook() {
 	});
 }
 
+	function removeHightlight(){
+		$("#sidebarmenu").find(":button").each(function(){
+			if($(this).hasClass("highlight")){
+				$(this).removeClass("highlight").addClass("normal");
+			}			
+		})
+		
+	}
 
+	// function changeHighlight(){
+	// 		if(canvas.isDrawingMode && $("#pentool").hasClass("normal")){
+	// 		$("#pentool").removeClass("normal").addClass("highlight");
+	// 		}
+	// 		else if(inEraserMode && $("#eraser").hasClass("normal")){
+	// 		$("#eraser").removeClass("normal").addClass("highlight");
+	// 		}
+	// 		else{
+	// 		$("#pointer").removeClass("normal").addClass("highlight");
+	// 		}
+	// }
 
 
 /************************ HISTORY FUNCTIONS *************************/
@@ -1272,6 +1294,22 @@ function initHistory() {
 	histIndex = 0;
 	histMax = 49;
 	histWorking = false;
+}
+
+
+function updateUndoRedoBtn(){
+
+	if (histIndex == 0){
+		$("#undo").prop('disabled', true);
+	} else{
+		$("#undo").prop('disabled', false);
+	}
+	if(histIndex < histList.length - 1){
+		$("#redo").prop('disabled', false);
+	} else {
+		$("#redo").prop('disabled', true);
+	}
+
 }
 
 function updateHistory() {
@@ -1295,6 +1333,7 @@ function updateHistory() {
 		histIndex++;
 	}
 	histList.push(JSON.stringify(canvas));
+	updateUndoRedoBtn();
 }
 
 	function undo() {
@@ -1308,31 +1347,12 @@ function updateHistory() {
 					canvas.renderAll();
 					histWorking = false;
 				});
-
+				updateUndoRedoBtn();
 			}
 		}
 	}
 
-	function removeHightlight(){
-		$("#sidebarmenu").find(":button").each(function(){
-			if($(this).hasClass("highlight")){
-				$(this).removeClass("highlight").addClass("normal");
-			}			
-		})
-		
-	}
 
-	// function changeHighlight(){
-	// 		if(canvas.isDrawingMode && $("#pentool").hasClass("normal")){
-	// 		$("#pentool").removeClass("normal").addClass("highlight");
-	// 		}
-	// 		else if(inEraserMode && $("#eraser").hasClass("normal")){
-	// 		$("#eraser").removeClass("normal").addClass("highlight");
-	// 		}
-	// 		else{
-	// 		$("#pointer").removeClass("normal").addClass("highlight");
-	// 		}
-	// }
 
 	function redo() {
 		// Only run if history is not busy
@@ -1346,6 +1366,7 @@ function updateHistory() {
 					canvas.renderAll();
 					histWorking = false;
 				});
+				updateUndoRedoBtn();
 			}
 		}
 	}

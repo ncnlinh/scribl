@@ -252,8 +252,9 @@ var pointer,
 	// };
 	drawingLineWidthEl.onchange = function() {
 		canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-		this.previousSibling.innerHTML = this.value;
+		$('drawing-line-width-px').innerHTML = this.value + "px";
 	};
+	drawingLineWidthEl.value = 22;
 
 
 	if (canvas.freeDrawingBrush) {
@@ -430,7 +431,6 @@ function drawingModeOn() {
 
 function drawingModeOff() {
 	canvas.isDrawingMode = false;
-	
 }
 
 
@@ -446,8 +446,8 @@ function toggleEraserMode() {
 function eraserModeOn() {
 	drawingModeOff();
 	if($("#eraser").hasClass("normal")){
-	removeHightlight();
-	$("#eraser").removeClass("normal").addClass("highlight");
+		removeHightlight();
+		$("#eraser").removeClass("normal").addClass("highlight");
 	}
 
 	inEraserMode = true;
@@ -458,6 +458,9 @@ function eraserModeOn() {
 	canvas.forEachObject(function(o) {
 		o.selectable = false;
 	});
+
+	fabric.Object.prototype.perPixelTargetFind = true;
+	canvas.renderAll();
 }
 
 function eraserModeOff() {
@@ -469,6 +472,8 @@ function eraserModeOff() {
 		if(o.type !== 'path' && o.type !== 'group')
 			o.selectable = true;
 	});
+	fabric.Object.prototype.perPixelTargetFind = false;
+	canvas.renderAll();
 }
 
 function disableDrawAndEraser() {
@@ -643,7 +648,8 @@ function downloadCanvas() {
 	// Normally transparent because default dataURL is .png
 	var currBgCol = canvas.backgroundColor;
 	var currBgImg = canvas.backgroundImage;
-	canvas.setBackgroundColor('#FFFFFF');
+    if (canvas.backgroundColor=='' && canvas.backgroundImage==null)
+    	canvas.setBackgroundColor('#FFFFFF');
 	canvas.discardActiveObject();
 	
 	// Create temp link and activate download
@@ -661,7 +667,7 @@ function downloadCanvas() {
 	else
 		canvas.setBackgroundColor(null);
 	canvas.renderAll();
-	changeHighlight();
+	// changeHighlight();
 }
 
 /** RESIZE CODE FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/

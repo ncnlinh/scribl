@@ -8,6 +8,9 @@ class PostRepository {
     }
 
     public function findByTag($tag) {
-        return Post::where('tag','=',$tag)->get()[0];
+        $posts = Post::where('tag','=',$tag)->get();
+        if (count($posts->toArray()) == 1)
+            return Post::where('tag','=',$tag)->get()[0];
+        else return null;
     }
 }

@@ -6,6 +6,7 @@
   <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Scribl!</title>
   <link rel="stylesheet" href="/css/all.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -20,12 +21,15 @@
           <h4 class="modal-title">Input the text</h4>
         </div>
         <div class="modal-body">
-          <div>
-          <button id = "textBold" class = "btn btn-default">bold</button>
-          <button id = "textItalic" class = "btn btn-default">italic</button>
-          <button id = "textUnderline" class = "btn btn-default">underline</button>
+          <button id = "textBold" class = "btn btn-default">
+          <i class="fa fa-bold"></i></button>
+          <button id = "textItalic" class = "btn btn-default">
+          <i class="fa fa-italic"></i></button>
+          <button id = "textUnderline" class = "btn btn-default">
+          <i class="fa fa-underline"></i></button>
           </div>
-          <input id="textinput" name="files[]" multiple />
+           <div class="modal-body">
+          <input id="textinput" name="files[]" multiple autofocus/>
           <output id="list"></output>
         </div>
         <div class="modal-footer">
@@ -68,15 +72,15 @@
           </li>
           <li><button id = "clearcanvas" class="btn btn-primary normal" title="Clear"></button>
           </li> 
-          <li><button id = "undo" class="btn btn-primary normal" title="Undo"></button>
+          <li><button id = "undo" class="btn btn-primary normal na" title="Undo" disabled></button>
           </li>
-          <li><button id = "redo" class="btn btn-primary normal" title="Redo"></button>
+          <li><button id = "redo" class="btn btn-primary normal na" title="Redo" disabled></button>
           </li>
           <li><button id = "uploadimages" class="btn btn-primary normal" title="Insert Image"></button>
           </li>
           <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext" title="Insert Text">text</button>
           </li>
-          <li><button id = "download" class="btn btn-primary normal" title="Download Scribl">DL</button>
+          <li><button id = "download" class="btn btn-primary normal" title="Download Scribl"></button>
           </li> 
           <li>
             <label for="drawing-mode-selector" style="color:white">Pen Mode:</label><br>

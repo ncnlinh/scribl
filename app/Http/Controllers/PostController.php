@@ -49,7 +49,7 @@ class PostController extends Controller
                   'facebookErrorCode'=>$e->getCode(),
                   'message'=>$e->getMessage()
               ]
-      ], Response::HTTP_INTERNAL_SERVER_ERROR);
+      ]);
     } catch(Facebook\Exceptions\FacebookSDKException $e) {
       return response()->json([
           'success'=>false,
@@ -60,7 +60,7 @@ class PostController extends Controller
                   'facebookErrorCode'=>$e->getCode(),
                   'message'=>$e->getMessage()
               ]
-      ], Response::HTTP_INTERNAL_SERVER_ERROR);
+      ]);
     }
 
     $permissions = $response->getGraphEdge();
@@ -84,7 +84,7 @@ class PostController extends Controller
                   'code'=>Response::HTTP_METHOD_NOT_ALLOWED,
                   'message'=>'need_authorization_publish_actions'
               ]
-      ], Response::HTTP_METHOD_NOT_ALLOWED);
+      ]);
     }
 
 
@@ -109,7 +109,7 @@ class PostController extends Controller
                   'facebookErrorCode'=>$e->getCode(),
                   'message'=>$e->getMessage()
               ]
-      ], Response::HTTP_INTERNAL_SERVER_ERROR);
+      ]);
     } catch(Facebook\Exceptions\FacebookSDKException $e) {
       return response()->json([
           'success'=>false,
@@ -120,7 +120,7 @@ class PostController extends Controller
                   'facebookErrorCode'=>$e->getCode(),
                   'message'=>$e->getMessage()
               ]
-      ], Response::HTTP_INTERNAL_SERVER_ERROR);
+      ]);
     }
 
     $graphNode = $response->getGraphNode();

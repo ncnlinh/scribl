@@ -712,7 +712,7 @@ function postOnFacebook() {
         }
 
         if (response &&
-                response.statusCode=="403" &&
+                response.error.code == "403" &&
                 response.error.message == "Token mismatch") {
             //handle session expire
         }

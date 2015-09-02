@@ -110,5 +110,35 @@
     </td>
   </tr>
   <script src="js/app.js" type="text/javascript"></script></table>
+  @if (Session::has('post'))
+    <div id="postModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            Post
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            @if (Session::has('image'))
+              <img src="data:image/png;base64,{{Session::get('image')}}">
+            @endif
+              <a href="{{env('APP_URL') . '/scribbl/'.  Session::get('post')['tag']}}">Link to this</a>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <script type="text/javascript">
+      $(window).load(function(){
+        $('#postModal').modal('show');
+      });
+    </script>
+  @endif
 </body>
 </html>

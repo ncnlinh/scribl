@@ -1,6 +1,6 @@
 window.fbAsyncInit = function() {
   FB.init({
-    appId      : '1480631925592204',
+    appId      : '1054942174524456',
     status     : true,
     xfbml      : true,
     version    : 'v2.4'
@@ -691,14 +691,26 @@ function postOnFacebook() {
 		'data': canvas.toDataURL()
 	}
 	).done(function(response) {
-		if (response == "200" ||
-			response == "require_publish_actions") {
-			console.log('hi');
-			FB.login(function(response){
-			}, {scope: 'publish_actions'});
-			
-		} 
-	});
+        if ((response &&
+                response.success == false &&
+                response.error.code == "500" &&
+                response.error.facebookErrorCode &&
+                response.error.facebookErrorCode == "200") ||
+            (response &&
+                response.success == false &&
+                response.error.code == "405" && //not allowed
+                response.error.message == "need_authorization_publish_actions"
+            )) {
+            FB.login(function (response) {
+            }, {scope: 'publish_actions'});
+        }
+
+        if (response &&
+                response.statusCode=="403" &&
+                response.error.message == "Token mismatch") {
+            //handle session expire
+        }
+    });
 }
 
 	function removeHightlight(){

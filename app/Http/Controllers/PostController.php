@@ -81,7 +81,7 @@ class PostController extends Controller
           'success'=>false,
           'error'=>
               [
-                  'error'=>Response::HTTP_METHOD_NOT_ALLOWED,
+                  'code'=>Response::HTTP_METHOD_NOT_ALLOWED,
                   'message'=>'need_authorization_publish_actions'
               ]
       ], Response::HTTP_METHOD_NOT_ALLOWED);

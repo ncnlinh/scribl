@@ -17,13 +17,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Input the text</h4>
+          <h4 class="modal-title">Input text</h4>
         </div>
         <div class="modal-body">
           <div>
-          <button id = "textBold" class = "btn btn-default">bold</button>
-          <button id = "textItalic" class = "btn btn-default">italic</button>
-          <button id = "textUnderline" class = "btn btn-default">underline</button>
+          <button id = "textBold" class = "btn btn-default"><b>B</b></button>
+          <button id = "textItalic" class = "btn btn-default"><i>I</i></button>
+          <button id = "textUnderline" class = "btn btn-default"><u>U</u></button>
           </div>
           <input id="textinput" name="files[]" multiple />
           <output id="list"></output>
@@ -43,50 +43,51 @@
       <div id="sidebarcontent">
         <h2 id="title">Scribl</h2>
         <hr id="titleline">
-        <ul id ="sidebarmenu" class="btn-group" data-toggle="buttons">
-          <li>
-            <button id = "pointer" class="btn btn-default normal" title="Select">
-            </button>
-          </li>
-          <li>
-            <div class="dropdown">
-            <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown" title="Draw"></button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="left: 0px; top: 40px">
-              <li role="presentation">
-                <label for="drawing-line-width">Line width:</label>
-                <span class="info">22</span><input type="range" value="30" min="0" max="150" id="drawing-line-width"><br>
-              </li>
-              <li role="presentation" class="divider"></li>
-              <li role="presentation" class="dropdown-header">
-                <label for="drawing-col">Line color:</label>
-                <span class="color-box" id="drawing-col" />
-              </li>
-            </ul>
-            </div>
-          </li>
-          <li><button id = "eraser" class="btn btn-primary normal" title="Erase"></button>
-          </li>
-          <li><button id = "clearcanvas" class="btn btn-primary normal" title="Clear"></button>
-          </li> 
-          <li><button id = "undo" class="btn btn-primary normal" title="Undo"></button>
-          </li>
-          <li><button id = "redo" class="btn btn-primary normal" title="Redo"></button>
-          </li>
-          <li><button id = "uploadimages" class="btn btn-primary normal" title="Insert Image"></button>
-          </li>
-          <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext" title="Insert Text">text</button>
-          </li>
-          <li><button id = "download" class="btn btn-primary normal" title="Download Scribl">DL</button>
-          </li> 
-          <li>
-            <label for="drawing-mode-selector" style="color:white">Pen Mode:</label><br>
-            <select id="drawing-mode-selector">
-              <option>Pencil</option>
-              <option>Circle</option>
-              <option>Spray</option>
-            </select><br>
-          </li>
-        </ul>
+          <ul id ="sidebarmenu" class="btn-group" data-toggle="buttons">
+            <li>
+              <button id = "pointer" class="btn btn-default normal" title="Select">
+              </button>
+            </li>
+            <li>
+              <div class="dropdown">
+              <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown" title="Draw"></button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="left: 0px; top: 40px">
+                <li role="presentation" class="dropdown-header">
+                  <label for="drawing-line-width">Width: </label>
+                  <input type="range" value="30" min="1" max="150" id="drawing-line-width">
+                  <span id="drawing-line-width-px">22px</span>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="dropdown-header">
+                  <label for="drawing-col">Color:</label>
+                  <span class="color-box" id="drawing-col" />
+                </li>
+              </ul>
+              </div>
+            </li>
+            <li><button id = "eraser" class="btn btn-primary normal" title="Erase"></button>
+            </li>
+            <li><button id = "clearcanvas" class="btn btn-primary normal" title="Clear"></button>
+            </li> 
+            <li><button id = "undo" class="btn btn-primary normal" title="Undo"></button>
+            </li>
+            <li><button id = "redo" class="btn btn-primary normal" title="Redo"></button>
+            </li>
+            <li><button id = "uploadimages" class="btn btn-primary normal" title="Insert Image"></button>
+            </li>
+            <li><button id = "text" class="btn normal" data-toggle="modal" data-target="#myModaltext" title="Insert Text"></button>
+            </li>
+            <li><button id = "download" class="btn btn-primary normal" title="Download Scribl"></button>
+            </li> 
+            <li>
+              <label for="drawing-mode-selector" style="color:white">Pen Mode:</label><br>
+              <select id="drawing-mode-selector">
+                <option>Pencil</option>
+                <option>Circle</option>
+                <option>Spray</option>
+              </select><br>
+            </li>
+          </ul>
         <br><br>
         <a href={{url('logout')}}>
           <button type="button" class="fb-btn">

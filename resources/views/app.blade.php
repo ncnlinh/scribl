@@ -59,7 +59,7 @@
                 <li role="presentation" class="dropdown-header">
                   <label for="drawing-line-width">Width: </label>
                   <input type="range" value="30" min="1" max="150" id="drawing-line-width">
-                  <span id="drawing-line-width-px">22px</span>
+                  <span id="drawing-line-width-px">30px</span>
                 </li>
                 <li role="presentation" class="divider"></li>
                 <li role="presentation" class="dropdown-header">

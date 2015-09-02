@@ -807,7 +807,7 @@ var pointer,
 		canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
 		$('drawing-line-width-px').innerHTML = this.value + "px";
 	};
-	drawingLineWidthEl.value = 30;
+	drawingLineWidthEl.value = 22;
 
 
 	if (canvas.freeDrawingBrush) {
@@ -1012,7 +1012,7 @@ function eraserModeOn() {
 		o.selectable = false;
 	});
 
-	// fabric.Object.prototype.perPixelTargetFind = true;
+	fabric.Object.prototype.perPixelTargetFind = true;
 	canvas.renderAll();
 }
 
@@ -1025,7 +1025,7 @@ function eraserModeOff() {
 		if(o.type !== 'path' && o.type !== 'group')
 			o.selectable = true;
 	});
-	// fabric.Object.prototype.perPixelTargetFind = false;
+	fabric.Object.prototype.perPixelTargetFind = false;
 	canvas.renderAll();
 }
 

@@ -14,19 +14,19 @@ use App\PostManager;
 
 class PostController extends Controller
 {
-    private $fb;
-    // private $user;
-    private $session;
+  private $fb;
+  // private $user;
+  private $session;
 
-    public function __construct() {
-      $this->middleware('auth', ['only' => 'app']);
-      $this->fb = new Facebook\Facebook([
-        'app_id' => env('FACEBOOK_APP_ID'),
-        'app_secret' => env('FACEBOOK_APP_SECRET'),
-        'default_graph_version' => 'v2.4',
-      ]);
-      $this->session = Session::get('FACEBOOK_SESSION_TOKEN');
-    }
+  public function __construct() {
+    $this->middleware('auth', ['only' => 'app']);
+    $this->fb = new Facebook\Facebook([
+      'app_id' => env('FACEBOOK_APP_ID'),
+      'app_secret' => env('FACEBOOK_APP_SECRET'),
+      'default_graph_version' => 'v2.4',
+    ]);
+    $this->session = Session::get('FACEBOOK_SESSION_TOKEN');
+  }
 
 
   /**
@@ -141,17 +141,13 @@ class PostController extends Controller
     ]);
   }
 
-  public function getPostLink(PostManager $postManager, Request $request) {
-    $post = $postManager->get($request->input('tag'));
-    if ($post) {
-      return response()->json(['success'=>true, 'data'=>['postURL' => $this->generatePostLink($post)]]);
-    } else {
-      return response()->json(['success'=>false, 'error'=>['code'=>Response::HTTP_NOT_FOUND]]);
-    }
-  }
-
   public function get(PostManager $postManager, $id) {
-    return $postManager->get($id);
+    $post = $postManager->get($id);
+    if ($post) {
+      $image = base64_encode(Storage::disk('s3')->get(env('APP_ENV') . '/img/' . $post['user_id'] . '/' . $tag . '/image.png'));
+      return redirect('/')->with('post', $post)->with('image', $image);
+    }
+    return view('errors/404');
   }
 
   private function saveFile(PostManager $postManager, $data) {

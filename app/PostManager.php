@@ -19,12 +19,8 @@ class PostManager{
     }
 
     public function get($tag) {
-        $post = $this->posts->findByTag($tag);
-        if ($post) {
-          $image = base64_encode(Storage::disk('s3')->get(env('APP_ENV') . '/img/' . $post['user_id'] . '/' . $tag . '/image.png'));
-          return redirect('/')->with('post', $post)->with('image', $image);
-        }
-        return view('errors/404');
+        return $this->posts->findByTag($tag);
+
     }
 
 }

@@ -893,9 +893,13 @@ function onObjAdded(e) {
 		// is loaded from a save. This section of code is a workaround
 		// to ensure that brush strokes are not selectable.
 		var curr = canvasLastObj();
-		if (curr.type == "path" || curr.type == "group")
+		if (curr.type == "path" || curr.type == "group" || curr.type == "circle")
 			setLastObjUnselectable();
 	} else {
+		var curr = canvasLastObj();
+		if (curr.type=="group" && curr._objects[0].type=="circle") {
+			breakGroup(curr);
+		}
 		updateHistory();
 	}
 }
@@ -1024,11 +1028,15 @@ function eraserModeOff() {
 	canvas.defaultCursor = 'default';
 
 	canvas.forEachObject(function(o) {
-		if(o.type !== 'path' && o.type !== 'group')
+		if(!isDrawnObject(o))
 			o.selectable = true;
 	});
 	// fabric.Object.prototype.perPixelTargetFind = false;
 	canvas.renderAll();
+}
+
+function isDrawnObject(obj) {
+	return (obj.type=='path' || obj.type=="group" || obj.type=="circle");
 }
 
 function disableDrawAndEraser() {
@@ -1046,7 +1054,19 @@ function removeHightlight(){
 			$(this).removeClass("highlight").addClass("normal");
 		}			
 	})
-	
+}
+
+function breakGroup(grp) {
+	histWorking = true;
+	var items = grp._objects;
+	grp._restoreObjectsState();
+	for (var i=0; i<items.length; i++) {
+		canvas.add(items[i]);
+		items[i].selectable = false;
+		items[i].setCoords();
+	}
+	canvas.remove(grp);
+	histWorking = false;
 }
 
 
@@ -1073,7 +1093,8 @@ function identifyAndErase(ev) {
 	if (target !== undefined) {
 		if (target.type =="path") {
 			eraseArea(target,mouseEv);
-		} else if (target.type == "group") {
+			updateHistory();
+		} else if (target.type=="group" || target.type=="circle") {
 			canvas.remove(target);
 		}
 	}
@@ -1112,7 +1133,6 @@ function eraseArea(target, mouseEv) {
 	}
 	if (numDel>=numNodes-2)
 		canvas.remove(target);
-	updateHistory();
 	canvas.renderAll();
 }
 
@@ -1246,7 +1266,7 @@ function clearBackgroundColor(){
 	currBgImg = canvas.backgroundImage;
 	
 	if (canvas.backgroundColor=='' && canvas.backgroundImage==null)
-    canvas.setBackgroundColor('#FFFFFF');
+    	canvas.setBackgroundColor('#FFFFFF');
 
 	activeObj = canvas.getActiveObject();
 	canvas.discardActiveObject();
@@ -1254,13 +1274,12 @@ function clearBackgroundColor(){
 }
 
 function resetBackgroundColor(){
-	if (currBgCol) 
-		canvas.setBackgroundColor(currBgCol);
-	else if (currBgImg) 
+	if (currBgImg) 
 		canvas.setBackgroundImage(currBgImg);
-	else{
-	canvas.setBackgroundColor(null);
-	}
+	else if (currBgCol!='') 
+		canvas.setBackgroundColor(currBgCol);
+	else
+		canvas.setBackgroundColor('');
 
 	if(activeObj)
 		canvas.setActiveObject(activeObj);

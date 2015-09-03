@@ -607,7 +607,7 @@ var currSave;				// Holds current state (for redo)
 var isSaved;				// Counter for whether changes have been made
 var idleTime = 0;			// Counter for number of minutes user is idle
 var idleInterval;			// Holds ID for setInterval() idle timer (for reset)
-
+var initHeight,initWidth;
 var	drawingLineWidthEl;
 
 var pointer,
@@ -628,7 +628,7 @@ var pointer,
 	italicBtn,
 	underlineBtn,
 	gifmaker,
-	postOnFb;
+    postOnFbPrompt;
 
 
 
@@ -641,8 +641,10 @@ var pointer,
 		isDrawingMode: true,
 		selection: false
 	});
-	canvas.setWidth(window.innerWidth-200);
-	canvas.setHeight(window.innerHeight-100);
+	initHeight = window.innerHeight-100;
+	initWidth = window.innerWidth-200;
+	canvas.setWidth(initWidth);
+	canvas.setHeight(initHeight);
 
 	addCanvasListeners();
 	addWindowListeners();
@@ -678,7 +680,7 @@ var pointer,
 	underlineBtn    = $('textUnderline');
 	gifmaker        = $('gif');
 
-	postOnFb = $('postOnFacebook');
+    postOnFbPrompt = $('postOnFacebookPromptBtn');
 
 	pointer.onclick 		= disableDrawAndEraser;
 	penTool.onclick 		= drawingModeOn;
@@ -697,9 +699,8 @@ var pointer,
 	boldBtn.onclick 		= toggleTextBold;
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
-	postOnFb.onclick 		= postOnFacebook;
-	gifmaker.onclick 		= gifMake;
-
+    postOnFbPrompt.onclick = postOnFacebookPrompt;
+	gifmaker.onclick = gifMake;
 	// TODO: CONSIDER REMOVING PATTERN BRUSH
 	// if (fabric.PatternBrush) {
 	// 	var vLinePatternBrush = new fabric.PatternBrush(canvas);
@@ -1425,7 +1426,7 @@ function resetBackgroundColor(){
 }
 
 function downloadCanvas() {
-	removeAllHighlight();
+
 	// Normally transparent because default dataURL is .png
 	clearBackgroundColor();
 	
@@ -1439,7 +1440,6 @@ function downloadCanvas() {
 	// Restore background state
 	// TODO: CONSIDER USING .JPG FORMAT
 	resetBackgroundColor();
-	// changeHighlight();
 }
 
 /** RESIZE CODE ADAPTED FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/
@@ -1452,34 +1452,9 @@ function resizeCanvas() {
 	canvas.calcOffset();
 }
 
-
-function postOnFacebook() {
-	$.post('/facebook/post', {
-		'_token': $('meta[name=csrf-token]').attr('content'),
-		'message': 'Hi',
-		'data': canvas.toDataURL()
-	}
-	).done(function(response) {
-        if ((response &&
-                response.success == false &&
-                response.error.code == "500" &&
-                response.error.facebookErrorCode &&
-                response.error.facebookErrorCode == "200") ||
-            (response &&
-                response.success == false &&
-                response.error.code == "405" && //not allowed
-                response.error.message == "need_authorization_publish_actions"
-            )) {
-            FB.login(function (response) {
-            }, {scope: 'publish_actions'});
-        }
-
-        if (response &&
-                response.error.code == "403" &&
-                response.error.message == "Token mismatch") {
-            //handle session expire
-        }
-    });
+function postOnFacebookPrompt() {
+    document.getElementById("postModalImage").src = canvas.toDataURL();
+    $("#beforePostModal").modal("show");
 }
 
 function removeAllHighlight(){
@@ -1517,10 +1492,12 @@ function breakGroup(grp) {
 	// 		}
 	// }
 
+
 function gifMake(){
 	var animatedImage;
+	var width = initWidth/initHeight * 360;
 	gifshot.createGIF(
-		{images: gifList, gifWidth: 640, gifHeight: 360, interval: 0.2}
+		{images: gifList, gifWidth: width, gifHeight: 360, interval: 0.2}
 		, function (obj) {
 			if (!obj.error) {
 				var image = obj.image, animatedImage = document.createElement('img');
@@ -1535,12 +1512,15 @@ function gifMake(){
 }
 
 
+
+
 /************************ HISTORY FUNCTIONS *************************/
 var histList;
 var histIndex;
 var histMax;
 var blockHistoryCalls;
 var gifList;
+var count = 0, interval = 2;
 function initHistory() {
 	// May not be necessary, this just makes
 	// sure the canvas is initialised first
@@ -1593,14 +1573,18 @@ function updateHistory() {
 	histList.push(JSON.stringify(canvas));
 	updateUndoRedoBtn();
 	clearBackgroundColor();
-	if(gifList.length == 100){
+	if(gifList.length == 75){
 		gifList = resizeGifList();
 	}
-	gifList.push(canvas.toDataURL());
+	count = (count + 1)%interval;
+	if(count == 0){
+		gifList.push(canvas.toDataURL());
+	}
 	resetBackgroundColor();
 }
 
     function resizeGifList(){
+    	interval = interval *2;
     	var newGifList = [];
     	for(var i = 0; i < gifList.length; i ++){
     		if(i%2 == 0)
@@ -1719,6 +1703,9 @@ function saveCanvas(wAlert){
 		var resp=confirm("Are you sure? This will clear everything!");
 		if (resp){
 			canvas.clear();
+			gifList = [];
+			count = 0;
+			interval = 2;
 		}
 	}
 
@@ -1781,9 +1768,14 @@ function addText() {
 		: (underlineProperty + ' underline');
 		newText.set('textDecoration',value).setCoords();
 	}
+
+	input.value="";
+
 	canvas.add(newText);
 	canvas.setActiveObject(canvasLastObj());
 	isSaved = false;
+
+
 
 	clearText();
 	textModeOff();
@@ -1799,7 +1791,7 @@ function textModeOff() {
 }
 
 function clearText(){
-		isTextBold = false;
+	isTextBold = false;
     isTextItalic = false;
     isTextUnderline = false;
 
@@ -1812,8 +1804,6 @@ function clearText(){
    if($("#textUnderline").hasClass("btn btn-success")){
     	$("#textUnderline").removeClass("btn btn-success").addClass("btn btn-default");
     }
-
-    $("#textinput").value ="";
 }
 
 function toggleTextBold(){
@@ -2154,4 +2144,88 @@ function checkPos(curr){
 	return false;
 }
 
+$(document).ready( function() {
+
+    $('#formPostOnFacebook').on('submit', function(event) {
+        event.preventDefault();
+        //.....
+        //show some spinner etc to indicate operation in progress
+        //.....
+        var formData = {
+            '_token': $('input[name="_token"]').val(),
+            message: $('textarea[name="message"]').val(),
+            data: canvas.toDataURL()
+        }
+
+        $.ajax({
+            type     : "POST",
+            url      : $(this).attr('action'),
+            data     : formData,
+            cache    : false,
+
+            success  : function(response) {
+                if ((response &&
+                    response.success == false &&
+                    response.error.code == "500" &&
+                    response.error.facebookErrorCode &&
+                    response.error.facebookErrorCode == "200") ||
+                    (response &&
+                        response.success == false &&
+                        response.error.code == "405" && //not allowed
+                        response.error.message == "need_authorization_publish_actions"
+                    )) {
+                    FB.login(function (response) {
+                        if (response.authResponse) {
+                            $('#postModalAlertPlaceholder').html(
+                                '<div class="alert alert-warning" role="alert">' +
+                                '<a class="close" data-dismiss="alert">&times;</a>' +
+                                '<span><span class="alert-title">Facebook authorization completed.</span> ' +
+                                'Please click the share button again to share.</a>' +
+                                '</span>' +
+                                '</div>'
+                            )
+                        } else {
+                            $('#postModalAlertPlaceholder').html(
+                                '<div class="alert alert-warning" role="alert">' +
+                                '<a class="close" data-dismiss="alert">&times;</a>' +
+                                '<span>' +
+                                'Please authorize the app to post on your Facebook.</a>' +
+                                '</span>' +
+                                '</div>'
+                            )
+                        }
+                    }, {scope: 'publish_actions'});
+                }
+
+                if (response &&
+                    response.success == false &&
+                    response.error.code == "403" &&
+                    response.error.message == "Token mismatch") {
+                    $('#postModalAlertPlaceholder').html(
+                        '<div class="alert alert-danger" role="alert">' +
+                        '<a class="close" data-dismiss="alert">&times;</a>' +
+                        '<span><span class="alert-title">Session expired.</span> ' +
+                        'Sorry for this, but you\'ll have to <a href="/">refresh the page.</a>' +
+                        '</span>' +
+                        '</div>'
+                    )
+                }
+
+                if (response &&
+                    response.success == true) {
+                    $('#postModalAlertPlaceholder').html(
+                        '<div class="alert alert-success" role="alert">' +
+                            '<a class="close" data-dismiss="alert">&times;</a>' +
+                            '<span><span class="alert-title">Post completed!</span> Check your post at ' +
+                                '<a href="'+response.data.url+'">'+response.data.url+'</a> and ' +
+                                '<a href="http://facebook.com/'+response.data.fbId+'">'+'http://facebook.com/'+response.data.fbId+'</a>' +
+                            '</span>' +
+                        '</div>'
+                    )
+                }
+            }
+        })
+    });
+
+});
 //# sourceMappingURL=app.js.map

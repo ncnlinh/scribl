@@ -11,11 +11,14 @@ use Auth;
 class AppController extends Controller
 {
     public function __construct() {
-      $this->middleware('auth', ['except' => 'welcome']);
     }
+  
     public function app() {
-      return view('app');
+      if (Auth::check())
+        return view('app');
+      return view('welcome');
     }
+
     public function welcome() {
       return view('welcome');
     }

@@ -28,7 +28,7 @@
           <i class="fa fa-underline"></i></button>
           </div>
            <div class="modal-body">
-          <input id="textinput" name="files[]" multiple autofocus/>
+          <input id="textinput" name="text" autofocus/>
           <output id="list"></output>
         </div>
         <div class="modal-footer">
@@ -98,11 +98,13 @@
         <br><br>
       </div>
       <div align="center">
-        <a href={{url('logout')}}>
-          <button type="button" class="fb-btn">
-              <img src="../images/FB-f-Logo__blue_29.png" />Logout
-          </button>
-        </a>
+        @if (Auth::check())
+          <a href={{url('logout')}}>
+            <button type="button" class="fb-btn">
+                <img src="../images/FB-f-Logo__blue_29.png" />Logout
+            </button>
+          </a>
+        @endif
       </div>
     </td>
     <!--************************* CANVAS *************************-->
@@ -112,39 +114,96 @@
       <canvas resize="true" id="canvas" width="800px" height="600px">
         This text is displayed if your browser does not support HTML5 Canvas.
       </canvas>
-      <button type="button" id="postOnFacebook" class="btn btn-primary">Send</button>
+      <button type="button" id="postOnFacebookPromptBtn" class="btn btn-primary">Send</button>
     </td>
   </tr>
+  </table>
 
-  <script src="js/app.js" type="text/javascript"></script></table>
-  @if (Session::has('post'))
-    <div id="postModal" class="modal fade" role="dialog">
+  <!--************************* POST MODAL **************************-->
+  @if (isset($post))
+    <div id="showPostModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
         <!-- Modal content-->
         <div class="modal-content">
           <div class="modal-header">
             Post
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            @if (Auth::check())
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            @endif
           </div>
           <div class="modal-body">
-            @if (Session::has('image'))
-              <img src="data:image/png;base64,{{Session::get('image')}}">
+            @if (isset($image))
+              <img class="postThumb" src="data:image/png;base64,{{$image}}">
             @endif
-              <a href="{{env('APP_URL') . '/scribbl/'.  Session::get('post')['tag']}}">Link to this</a>
+              <a href="{{env('APP_URL') . '/scribbl/'. $post->tag }}">Link to this</a>
           </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+          @if (Auth::check())
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          @else
+            <div class="modal-footer">
+              <a href={{url('login')}}>
+                <button type="button" class="fb-btn">
+                  <img src="../images/FB-f-Logo__blue_29.png" />Login to continue
+                </button>
+              </a>
+            </div>
+          @endif
         </div>
 
       </div>
     </div>
+
+
+  @endif
+
+  <!--************************* BEFORE POST PROMPT MODAL **************************-->
+  <div id="beforePostModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <span id="postModalHeader">
+            Post on Facebook
+          </span>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+
+          <div id="postModalHeader">
+            <div id="postModalAlertPlaceholder"></div>
+            <div class="center">
+              <img class="postThumb" id="postModalImage">
+            </div>
+            {!! Form::open(array(
+              'action' => 'PostController@post',
+              'method' => 'post',
+              'id' => 'formPostOnFacebook'
+            )) !!}
+              <div class="form-group">
+                {!! Form::label('message', 'Message:') !!}
+                {!! Form::textarea('message', null, ['class'=>'form-control']) !!}
+              </div>
+              {!! Form::submit('Share on Facebook', ['class'=>'btn btn-primary form-control']) !!}
+            {!! Form::close() !!}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script src="/js/app.js" type="text/javascript"></script>
+  @if (isset($post))
     <script type="text/javascript">
-      $(window).load(function(){
-        $('#postModal').modal('show');
-      });
+        $(window).load(function(){
+          $('#showPostModal').modal({backdrop: 'static', keyboard: false});
+        });
     </script>
   @endif
 </body>

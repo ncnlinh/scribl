@@ -27,11 +27,9 @@ elixir(function(mix) {
         paths.colpick + '/css/colpick.css',
         paths.bootstrap + '/dist/css/bootstrap.min.css',
         paths.bootstrap + '/dist/css/bootstrap-theme.min.css',
-        paths['landing-page'] + '/font-awesome/css/font-awesome.min.css',
         paths['font-awesome'] + '/css/font-awesome.min.css',
-        'landing-page.css',
         'canvas.css',
-      ], 'public/css/')
+      ], 'public/css/all.css')
       .copy([
         paths.bootstrap + '/fonts/bootstrap/**',
         paths['landing-page'] + '/font-awesome/**',
@@ -44,10 +42,15 @@ elixir(function(mix) {
         paths.colpick + '/js/colpick.js',
         paths['jquery-ui'] + '/jquery-ui.min.js',
         paths.gifshot + '/build/gifshot.min.js',
-        'canvas.js'
+        'canvas.js',
+        'post.js'
       ], 'public/js/app.js')
       .copy([
         'resources/assets/images/**',
         paths['landing-page'] + '/img/**'
-      ], 'public/images');
+      ], 'public/images')
+      .styles([
+          paths['landing-page'] + '/font-awesome/css/font-awesome.min.css',
+          'landing-page.css'
+      ], 'public/css/landing.css');
 });

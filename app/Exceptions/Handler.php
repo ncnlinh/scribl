@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
                     'code'=>Response::HTTP_FORBIDDEN,
                     'message'=>'Token mismatch'
                 ]
-            ], Response::HTTP_FORBIDDEN);
+            ]);
         }
 
         return parent::render($request, $e);

@@ -17,7 +17,7 @@ class AuthController extends Controller implements AuthenticateUserListener{
       return $authenticateUser->logout($this);
     }
     public function userHasLoggedIn($user){
-      return redirect('/');
+      return redirect()->back();
     }
     public function userHasLoggedOut(){
       return redirect('/');

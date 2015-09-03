@@ -807,7 +807,7 @@ var pointer,
 		canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
 		$('drawing-line-width-px').innerHTML = this.value + "px";
 	};
-	drawingLineWidthEl.value = 22;
+	drawingLineWidthEl.value = 30;
 
 
 	if (canvas.freeDrawingBrush) {
@@ -1012,7 +1012,7 @@ function eraserModeOn() {
 		o.selectable = false;
 	});
 
-	fabric.Object.prototype.perPixelTargetFind = true;
+	// fabric.Object.prototype.perPixelTargetFind = true;
 	canvas.renderAll();
 }
 
@@ -1025,7 +1025,7 @@ function eraserModeOff() {
 		if(o.type !== 'path' && o.type !== 'group')
 			o.selectable = true;
 	});
-	fabric.Object.prototype.perPixelTargetFind = false;
+	// fabric.Object.prototype.perPixelTargetFind = false;
 	canvas.renderAll();
 }
 
@@ -1053,11 +1053,11 @@ function erase(ev) {
 	switch(ev.e.type.toLowerCase()) {
 		case 'mousedown':
 		erasing = true;
-		removeIfPath(ev);
+		identifyAndErase(ev);
 		break;
 		case 'mousemove':
 		if(erasing)
-			removeIfPath(ev);
+			identifyAndErase(ev);
 		break;
 		case 'mouseup':
 		erasing = false;
@@ -1065,15 +1065,54 @@ function erase(ev) {
 	}
 }
 
-function removeIfPath(ev) {
+function identifyAndErase(ev) {
 	var mouseEv = ev.e;
 	var target = canvas.findTarget(mouseEv, true);
-	if (target !== undefined && (target.type == "path" || target.type == "group")) {
-		canvas.remove(target);
+	if (target !== undefined) {
+		if (target.type =="path") {
+			eraseArea(target,mouseEv);
+		} else if (target.type == "group") {
+			canvas.remove(target);
+		}
 	}
 }
 
+function withinCursorRadius(target, pointX, pointY, mouseEv) {
+	var mouseX = mouseEv.layerX;
+	var mouseY = mouseEv.layerY;
+	var dist = Math.sqrt(Math.pow(mouseX-pointX, 2) + Math.pow(mouseY-pointY,2));
+	return dist < target.strokeWidth;
+}
 
+function eraseArea(target, mouseEv) {
+	// Get where the eraser hits
+	var numNodes = target.path.length;
+	var toSplit = [0];
+	var numDel = 0;
+	for (var i=0; i<numNodes; i++) {
+		var curr = target.path[i];
+		if (withinCursorRadius(target,curr[1],curr[2],mouseEv)) {
+			curr[0] = "L";
+			if (curr.length>=3)
+				curr.splice(3);
+			if (i>0) {
+				curr[1] = target.path[i-1][1];
+				curr[2] = target.path[i-1][2];
+			}
+			if (i<numNodes-1 && target.path[i+1][0]=="Q"){
+				target.path[i+1][0] = "M";
+				target.path[i+1].splice(3);
+			}
+		}
+		if (curr[0]=="L") {
+			numDel++;
+		}
+	}
+	if (numDel>=numNodes-2)
+		canvas.remove(target);
+	updateHistory();
+	canvas.renderAll();
+}
 
 
 

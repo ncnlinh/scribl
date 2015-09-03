@@ -1418,7 +1418,10 @@ function resetBackgroundColor(){
 }
 
 function downloadCanvas() {
+<<<<<<< HEAD
+=======
 	removeAllHighlight();
+>>>>>>> origin/master
 	// Normally transparent because default dataURL is .png
 	clearBackgroundColor();
 	
@@ -1432,7 +1435,6 @@ function downloadCanvas() {
 	// Restore background state
 	// TODO: CONSIDER USING .JPG FORMAT
 	resetBackgroundColor();
-	// changeHighlight();
 }
 
 /** RESIZE CODE ADAPTED FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/
@@ -1475,6 +1477,15 @@ function postOnFacebook() {
     });
 }
 
+<<<<<<< HEAD
+	function removeHightlight(){
+		$("#sidebarmenu").find(":button").each(function(){
+			if($(this).hasClass("highlight")){
+				$(this).removeClass("highlight").addClass("normal");
+			}		
+		})
+		canvas.renderAll(); 
+=======
 function removeAllHighlight(){
 	$("#sidebarmenu").find(":button").each(function(){
 		if($(this).hasClass("highlight")){
@@ -1492,6 +1503,7 @@ function breakGroup(grp) {
 		canvas.add(items[i]);
 		items[i].selectable = false;
 		items[i].setCoords();
+>>>>>>> origin/master
 	}
 	canvas.remove(grp);
 	blockHistoryCalls = false;
@@ -1510,6 +1522,27 @@ function breakGroup(grp) {
 	// 		}
 	// }
 
+<<<<<<< HEAD
+	function gifMake(){
+
+		var animatedImage;
+		gifshot.createGIF(
+			{images: gifList, gifWidth: 640, gifHeight: 360, interval: 0.2}
+			, function (obj) {
+				if (!obj.error) {
+					var image = obj.image, animatedImage = document.createElement('img');
+					animatedImage.src = image;
+        // document.body.appendchild(animatedImage);
+        var giflink = document.createElement("a");
+        giflink.download = "scribl";
+        giflink.href = animatedImage.src;
+        giflink.click();
+
+    }
+});
+
+	}
+=======
 function gifMake(){
 	var animatedImage;
 	gifshot.createGIF(
@@ -1526,6 +1559,7 @@ function gifMake(){
 		    }
 	});
 }
+>>>>>>> origin/master
 
 
 /************************ HISTORY FUNCTIONS *************************/
@@ -1534,6 +1568,7 @@ var histIndex;
 var histMax;
 var blockHistoryCalls;
 var gifList;
+var count = 0, interval = 1;
 function initHistory() {
 	// May not be necessary, this just makes
 	// sure the canvas is initialised first
@@ -1589,11 +1624,15 @@ function updateHistory() {
 	if(gifList.length == 100){
 		gifList = resizeGifList();
 	}
-	gifList.push(canvas.toDataURL());
+	count = (count + 1)%interval;
+	if(count == 0){
+		gifList.push(canvas.toDataURL());
+	}
 	resetBackgroundColor();
 }
 
     function resizeGifList(){
+    	interval = interval *2;
     	var newGifList = [];
     	for(var i = 0; i < gifList.length; i ++){
     		if(i%2 == 0)
@@ -1712,6 +1751,9 @@ function saveCanvas(wAlert){
 		var resp=confirm("Are you sure? This will clear everything!");
 		if (resp){
 			canvas.clear();
+			gifList = [];
+			count = 0;
+			interval = 1;
 		}
 	}
 
@@ -1774,9 +1816,14 @@ function addText() {
 		: (underlineProperty + ' underline');
 		newText.set('textDecoration',value).setCoords();
 	}
+
+	input.value="";
+
 	canvas.add(newText);
 	canvas.setActiveObject(canvasLastObj());
 	isSaved = false;
+
+
 
 	clearText();
 	textModeOff();
@@ -1792,7 +1839,7 @@ function textModeOff() {
 }
 
 function clearText(){
-		isTextBold = false;
+	isTextBold = false;
     isTextItalic = false;
     isTextUnderline = false;
 
@@ -1805,8 +1852,6 @@ function clearText(){
    if($("#textUnderline").hasClass("btn btn-success")){
     	$("#textUnderline").removeClass("btn btn-success").addClass("btn btn-default");
     }
-
-    $("#textinput").value ="";
 }
 
 function toggleTextBold(){

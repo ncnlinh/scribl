@@ -28,7 +28,7 @@
           <i class="fa fa-underline"></i></button>
           </div>
            <div class="modal-body">
-          <input id="textinput" name="files[]" multiple autofocus/>
+          <input id="textinput" name="text" autofocus/>
           <output id="list"></output>
         </div>
         <div class="modal-footer">

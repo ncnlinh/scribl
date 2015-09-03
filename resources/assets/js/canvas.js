@@ -254,8 +254,9 @@ var pointer,
 	// };
 	drawingLineWidthEl.onchange = function() {
 		canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-		this.previousSibling.innerHTML = this.value;
+		$('drawing-line-width-px').innerHTML = this.value + "px";
 	};
+	drawingLineWidthEl.value = 30;
 
 
 	if (canvas.freeDrawingBrush) {
@@ -432,7 +433,6 @@ function drawingModeOn() {
 
 function drawingModeOff() {
 	canvas.isDrawingMode = false;
-	
 }
 
 
@@ -448,8 +448,8 @@ function toggleEraserMode() {
 function eraserModeOn() {
 	drawingModeOff();
 	if($("#eraser").hasClass("normal")){
-	removeHightlight();
-	$("#eraser").removeClass("normal").addClass("highlight");
+		removeHightlight();
+		$("#eraser").removeClass("normal").addClass("highlight");
 	}
 
 	inEraserMode = true;
@@ -460,6 +460,9 @@ function eraserModeOn() {
 	canvas.forEachObject(function(o) {
 		o.selectable = false;
 	});
+
+	// fabric.Object.prototype.perPixelTargetFind = true;
+	canvas.renderAll();
 }
 
 function eraserModeOff() {
@@ -471,6 +474,8 @@ function eraserModeOff() {
 		if(o.type !== 'path' && o.type !== 'group')
 			o.selectable = true;
 	});
+	// fabric.Object.prototype.perPixelTargetFind = false;
+	canvas.renderAll();
 }
 
 function disableDrawAndEraser() {
@@ -497,11 +502,11 @@ function erase(ev) {
 	switch(ev.e.type.toLowerCase()) {
 		case 'mousedown':
 		erasing = true;
-		removeIfPath(ev);
+		identifyAndErase(ev);
 		break;
 		case 'mousemove':
 		if(erasing)
-			removeIfPath(ev);
+			identifyAndErase(ev);
 		break;
 		case 'mouseup':
 		erasing = false;
@@ -509,15 +514,54 @@ function erase(ev) {
 	}
 }
 
-function removeIfPath(ev) {
+function identifyAndErase(ev) {
 	var mouseEv = ev.e;
 	var target = canvas.findTarget(mouseEv, true);
-	if (target !== undefined && (target.type == "path" || target.type == "group")) {
-		canvas.remove(target);
+	if (target !== undefined) {
+		if (target.type =="path") {
+			eraseArea(target,mouseEv);
+		} else if (target.type == "group") {
+			canvas.remove(target);
+		}
 	}
 }
 
+function withinCursorRadius(target, pointX, pointY, mouseEv) {
+	var mouseX = mouseEv.layerX;
+	var mouseY = mouseEv.layerY;
+	var dist = Math.sqrt(Math.pow(mouseX-pointX, 2) + Math.pow(mouseY-pointY,2));
+	return dist < target.strokeWidth;
+}
 
+function eraseArea(target, mouseEv) {
+	// Get where the eraser hits
+	var numNodes = target.path.length;
+	var toSplit = [0];
+	var numDel = 0;
+	for (var i=0; i<numNodes; i++) {
+		var curr = target.path[i];
+		if (withinCursorRadius(target,curr[1],curr[2],mouseEv)) {
+			curr[0] = "L";
+			if (curr.length>=3)
+				curr.splice(3);
+			if (i>0) {
+				curr[1] = target.path[i-1][1];
+				curr[2] = target.path[i-1][2];
+			}
+			if (i<numNodes-1 && target.path[i+1][0]=="Q"){
+				target.path[i+1][0] = "M";
+				target.path[i+1].splice(3);
+			}
+		}
+		if (curr[0]=="L") {
+			numDel++;
+		}
+	}
+	if (numDel>=numNodes-2)
+		canvas.remove(target);
+	updateHistory();
+	canvas.renderAll();
+}
 
 
 
@@ -647,7 +691,9 @@ var activeObj;
 function clearBackgroundColor(){
 	currBgCol = canvas.backgroundColor;
 	currBgImg = canvas.backgroundImage;
-	canvas.setBackgroundColor('#FFFFFF');
+	
+	if (canvas.backgroundColor=='' && canvas.backgroundImage==null)
+    canvas.setBackgroundColor('#FFFFFF');
 
 	activeObj = canvas.getActiveObject();
 	canvas.discardActiveObject();
@@ -661,7 +707,6 @@ function resetBackgroundColor(){
 		canvas.setBackgroundImage(currBgImg);
 	else{
 	canvas.setBackgroundColor(null);
-	// alert(canvas.backgroundColor);
 	}
 
 	if(activeObj)
@@ -680,14 +725,15 @@ function downloadCanvas() {
 	
 	// Create temp link and activate download
 	var link = document.createElement("a");
-	link.download = "scribbl";
+	link.download = "scribl";
 	link.href = canvas.toDataURL();
 	link.click();
+	// alert(link);
 
 	// Restore background state
 	// TODO: CONSIDER USING .JPG FORMAT
 	resetBackgroundColor();
-	changeHighlight();
+	// changeHighlight();
 }
 
 /** RESIZE CODE FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/
@@ -717,14 +763,26 @@ function postOnFacebook() {
 		'data': canvas.toDataURL()
 	}
 	).done(function(response) {
-		if (response == "200" ||
-			response == "require_publish_actions") {
-			console.log('hi');
-			FB.login(function(response){
-			}, {scope: 'publish_actions'});
-			
-		} 
-	});
+        if ((response &&
+                response.success == false &&
+                response.error.code == "500" &&
+                response.error.facebookErrorCode &&
+                response.error.facebookErrorCode == "200") ||
+            (response &&
+                response.success == false &&
+                response.error.code == "405" && //not allowed
+                response.error.message == "need_authorization_publish_actions"
+            )) {
+            FB.login(function (response) {
+            }, {scope: 'publish_actions'});
+        }
+
+        if (response &&
+                response.error.code == "403" &&
+                response.error.message == "Token mismatch") {
+            //handle session expire
+        }
+    });
 }
 
 	function removeHightlight(){
@@ -758,9 +816,10 @@ function postOnFacebook() {
 					animatedImage.src = image;
         // document.body.appendchild(animatedImage);
         var giflink = document.createElement("a");
-        giflink.download = "scribbl";
+        giflink.download = "scribl";
         giflink.href = animatedImage.src;
         giflink.click();
+
     }
 });
 

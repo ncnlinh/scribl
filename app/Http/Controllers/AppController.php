@@ -11,7 +11,7 @@ use Auth;
 class AppController extends Controller
 {
     public function __construct() {
-      $this->middleware('auth', ['only' => 'app']);
+      $this->middleware('auth', ['except' => 'welcome']);
     }
     public function app() {
       return view('app');

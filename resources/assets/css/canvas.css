@@ -25,7 +25,7 @@
  text-align: center;
 }
 
-#selectableBG .ui-selecting { background: #FECA40; }
+/*#selectableBG .ui-selecting { background: #FECA40; }
 #selectableBG .ui-selected { background: #F39814; color: white; }
 #selectableBG { padding-left: 80px; width: 800px; list-style-type: none;}
 #selectableBG li { padding: 1px; width: 200px; height: 140px; line-height: 135px; text-align: center; display: inline-block; vertical-align: middle;}
@@ -34,9 +34,10 @@
   padding:2px;
   border-spacing:5px;
 }
+
 #newobjtable td {
   padding:2px;
-}
+}*/
 
 .color-box {
   display: inline-block;
@@ -115,8 +116,12 @@ input[type=range] {
   color:black;
 }
 
+
+#pointer{
+  background:url("../images/select2.png");
+}
 #pentool{
-  background:url("../images/pen.png");
+  background:url("../images/pen2.png");
   background-repeat: no-repeat;
   background-size: 100%;
   background-size: 40px;
@@ -128,11 +133,9 @@ input[type=range] {
 #pentool.normal{
   background-color: #E9E9E9;
 }
-
 #eraser{
   background:url("../images/eraser.png");
 }
-
 #clearcanvas{
   background:url("../images/clear.png");
 }
@@ -143,17 +146,15 @@ input[type=range] {
   background:url("../images/redo.png");
 }
 #uploadimages{
-  background:url("../images/import image.png");
-}
-#download{
-  background:url("../images/download.png");
+  background:url("../images/import image2.png");
 }
 #text{
   background:url("../images/text.png");
 }
-#pointer{
-  background:url("../images/select.png");
+#download{
+  background:url("../images/download.png");
 }
+
 #postOnFacebook{
   position: absolute;
   right: 0;

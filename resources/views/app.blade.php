@@ -98,11 +98,13 @@
         <br><br>
       </div>
       <div align="center">
-        <a href={{url('logout')}}>
-          <button type="button" class="fb-btn">
-              <img src="../images/FB-f-Logo__blue_29.png" />Logout
-          </button>
-        </a>
+        @if (Auth::check())
+          <a href={{url('logout')}}>
+            <button type="button" class="fb-btn">
+                <img src="../images/FB-f-Logo__blue_29.png" />Logout
+            </button>
+          </a>
+        @endif
       </div>
     </td>
     <!--************************* CANVAS *************************-->
@@ -116,8 +118,8 @@
     </td>
   </tr>
 
-  <script src="js/app.js" type="text/javascript"></script></table>
-  @if (Session::has('post'))
+  <script src="/js/app.js" type="text/javascript"></script></table>
+  @if (isset($post))
     <div id="postModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
@@ -125,25 +127,36 @@
         <div class="modal-content">
           <div class="modal-header">
             Post
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            @if (Auth::check())
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            @endif
           </div>
           <div class="modal-body">
-            @if (Session::has('image'))
-              <img src="data:image/png;base64,{{Session::get('image')}}">
+            @if (isset($image))
+              <img src="data:image/png;base64,{{$image}}">
             @endif
-              <a href="{{env('APP_URL') . '/scribbl/'.  Session::get('post')['tag']}}">Link to this</a>
+              <a href="{{env('APP_URL') . '/scribbl/'. $post->tag }}">Link to this</a>
           </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+          @if (Auth::check())
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          @else
+            <div class="modal-footer">
+              <a href={{url('login')}}>
+                <button type="button" class="fb-btn">
+                  <img src="../images/FB-f-Logo__blue_29.png" />Login to continue
+                </button>
+              </a>
+            </div>
+          @endif
         </div>
 
       </div>
     </div>
     <script type="text/javascript">
       $(window).load(function(){
-        $('#postModal').modal('show');
+        $('#postModal').modal({backdrop: 'static', keyboard: false});
       });
     </script>
   @endif

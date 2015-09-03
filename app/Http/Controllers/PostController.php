@@ -145,7 +145,7 @@ class PostController extends Controller
     $post = $postManager->get($id);
     if ($post) {
       $image = base64_encode(Storage::disk('s3')->get(env('APP_ENV') . '/img/' . $post['user_id'] . '/' . $post->tag . '/image.png'));
-      return redirect('/')->with('post', $post)->with('image', $image);
+      return view('app', ['post'=> $post,'image'=> $image]);
     }
     return view('errors/404');
   }

@@ -103,11 +103,19 @@
                             <h1>Scribl</h1>
                             <h3>Letting you draw on people's walls</h3>
                             <hr class="intro-divider">
-                            <a href={{url('login')}}>
-                                <button type="button" class="fb-btn">
-                                    <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
-                                </button>
-                            </a>
+                            @if (Auth::check())
+                                <a href={{url('/')}}>
+                                    <button type="button" class="fb-btn">
+                                        <img src="../images/FB-f-Logo__blue_29.png" /> Continue with Facebook
+                                    </button>
+                                </a>
+                            @else
+                                <a href={{url('login')}}>
+                                    <button type="button" class="fb-btn">
+                                        <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
+                                    </button>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -211,11 +219,19 @@
                     <div class="col-lg-12" style="text-align: center">
                         <h2>Start Scribling now!</h2>
                         <br>
-                        <a href={{url('login')}}>
-                            <button  type="button" class="fb-btn">
-                                <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
-                            </button>
-                        </a>
+                        @if (Auth::check())
+                            <a href={{url('/')}}>
+                                <button type="button" class="fb-btn">
+                                    <img src="../images/FB-f-Logo__blue_29.png" /> Continue with Facebook
+                                </button>
+                            </a>
+                        @else
+                            <a href={{url('login')}}>
+                                <button type="button" class="fb-btn">
+                                    <img src="../images/FB-f-Logo__blue_29.png" /> Login with Facebook
+                                </button>
+                            </a>
+                        @endif
                     </div>
                 </div>
 

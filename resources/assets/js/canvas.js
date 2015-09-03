@@ -46,7 +46,7 @@ var currSave;				// Holds current state (for redo)
 var isSaved;				// Counter for whether changes have been made
 var idleTime = 0;			// Counter for number of minutes user is idle
 var idleInterval;			// Holds ID for setInterval() idle timer (for reset)
-
+var initHeight,initWidth;
 var	drawingLineWidthEl;
 
 var pointer,
@@ -80,8 +80,10 @@ var pointer,
 		isDrawingMode: true,
 		selection: false
 	});
-	canvas.setWidth(window.innerWidth-200);
-	canvas.setHeight(window.innerHeight-100);
+	initHeight = window.innerHeight-100;
+	initWidth = window.innerWidth-200;
+	canvas.setWidth(initWidth);
+	canvas.setHeight(initHeight);
 
 	addCanvasListeners();
 	addWindowListeners();
@@ -857,7 +859,7 @@ function resetBackgroundColor(){
 }
 
 function downloadCanvas() {
-	removeAllHighlight();
+
 	// Normally transparent because default dataURL is .png
 	clearBackgroundColor();
 	
@@ -913,6 +915,7 @@ function postOnFacebook() {
     });
 }
 
+
 function removeAllHighlight(){
 	$("#sidebarmenu").find(":button").each(function(){
 		if($(this).hasClass("highlight")){
@@ -948,25 +951,26 @@ function breakGroup(grp) {
 	// 		}
 	// }
 
-	function gifMake(){
 
-		var animatedImage;
-		gifshot.createGIF(
-			{images: gifList, gifWidth: 640, gifHeight: 360, interval: 0.2}
-			, function (obj) {
-				if (!obj.error) {
-					var image = obj.image, animatedImage = document.createElement('img');
-					animatedImage.src = image;
-                    // document.body.appendchild(animatedImage);
-                    var giflink = document.createElement("a");
-                    giflink.download = "scribl";
-                    giflink.href = animatedImage.src;
-                    giflink.click();
+function gifMake(){
+	var animatedImage;
+	var width = initWidth/initHeight * 360;
+	gifshot.createGIF(
+		{images: gifList, gifWidth: width, gifHeight: 360, interval: 0.2}
+		, function (obj) {
+			if (!obj.error) {
+				var image = obj.image, animatedImage = document.createElement('img');
+				animatedImage.src = image;
+				// document.body.appendchild(animatedImage);
+				var giflink = document.createElement("a");
+				giflink.download = "scribl";
+				giflink.href = animatedImage.src;
+				giflink.click();
+		    }
+	});
+}
 
-                }
-            });
 
-	}
 
 
 /************************ HISTORY FUNCTIONS *************************/
@@ -975,7 +979,7 @@ var histIndex;
 var histMax;
 var blockHistoryCalls;
 var gifList;
-var count = 0, interval = 1;
+var count = 0, interval = 2;
 function initHistory() {
 	// May not be necessary, this just makes
 	// sure the canvas is initialised first
@@ -1028,7 +1032,7 @@ function updateHistory() {
 	histList.push(JSON.stringify(canvas));
 	updateUndoRedoBtn();
 	clearBackgroundColor();
-	if(gifList.length == 100){
+	if(gifList.length == 75){
 		gifList = resizeGifList();
 	}
 	count = (count + 1)%interval;
@@ -1160,7 +1164,7 @@ function saveCanvas(wAlert){
 			canvas.clear();
 			gifList = [];
 			count = 0;
-			interval = 1;
+			interval = 2;
 		}
 	}
 

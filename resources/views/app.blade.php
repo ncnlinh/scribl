@@ -78,10 +78,12 @@
           </li>
           <li><button id = "uploadimages" class="btn btn-primary normal" title="Insert Image"></button>
           </li>
-          <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext" title="Insert Text">text</button>
+          <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext" title="Insert Text"></button>
           </li>
           <li><button id = "download" class="btn btn-primary normal" title="Download Scribl"></button>
-          </li> 
+          </li>
+          <li><button id = "gif" class="btn btn-primary normal" title="Download Gif">gif</button>
+          </li>  
           <li>
             <label for="drawing-mode-selector" style="color:white">Pen Mode:</label><br>
             <select id="drawing-mode-selector">
@@ -109,6 +111,9 @@
       <button type="button" id="postOnFacebook" class="btn btn-primary">Send</button>
     </td>
   </tr>
-  <script src="js/app.js" type="text/javascript"></script></table>
+  
+  <script src="https://rawgit.com/yahoo/gifshot/master/build/gifshot.js" type="text/javascript"></script>
+<script src="js/app.js" type="text/javascript"></script>
+</table>
 </body>
 </html>

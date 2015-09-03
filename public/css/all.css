@@ -762,7 +762,10 @@ input[type=range] {
   background:url("../images/import image.png");
 }
 #download{
-  background:url("../images/export.png");
+  background:url("../images/download.png");
+}
+#text{
+  background:url("../images/text.png");
 }
 #pointer{
   background:url("../images/select.png");

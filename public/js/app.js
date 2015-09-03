@@ -673,6 +673,7 @@ var pointer,
 	boldBtn         = $('textBold');
 	italicBtn       = $('textItalic');
 	underlineBtn    = $('textUnderline');
+	gifmaker        = $('gif');
 
 	postOnFb = $('postOnFacebook');
 
@@ -689,6 +690,7 @@ var pointer,
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
 	postOnFb.onclick = postOnFacebook;
+	gifmaker.onclick = gifMake;
 
 	// TODO: CONSIDER REMOVING PATTERN BRUSH
 	if (fabric.PatternBrush) {
@@ -1191,13 +1193,43 @@ function deleteActiveObj() {
 	canvas.discardActiveObject();
 }
 
+var currBgCol;
+var currBgImg;
+var activeObj;
+
+function clearBackgroundColor(){
+	currBgCol = canvas.backgroundColor;
+	currBgImg = canvas.backgroundImage;
+	canvas.setBackgroundColor('#FFFFFF');
+
+	activeObj = canvas.getActiveObject();
+	canvas.discardActiveObject();
+
+}
+
+function resetBackgroundColor(){
+	if (currBgCol) 
+		canvas.setBackgroundColor(currBgCol);
+	else if (currBgImg) 
+		canvas.setBackgroundImage(currBgImg);
+	else{
+	canvas.setBackgroundColor(null);
+	// alert(canvas.backgroundColor);
+	}
+
+	if(activeObj)
+		canvas.setActiveObject(activeObj);
+
+	canvas.renderAll();
+	currBgCol = null;
+	currBgImg = null;
+	activeObj = null;
+}
+
 function downloadCanvas() {
 	removeHightlight();
 	// Normally transparent because default dataURL is .png
-	var currBgCol = canvas.backgroundColor;
-	var currBgImg = canvas.backgroundImage;
-	canvas.setBackgroundColor('#FFFFFF');
-	canvas.discardActiveObject();
+	clearBackgroundColor();
 	
 	// Create temp link and activate download
 	var link = document.createElement("a");
@@ -1207,13 +1239,7 @@ function downloadCanvas() {
 
 	// Restore background state
 	// TODO: CONSIDER USING .JPG FORMAT
-	if (currBgCol) 
-		canvas.setBackgroundColor(currBgCol);
-	else if (currBgImg) 
-		canvas.setBackgroundImage(currBgImg);
-	else
-		canvas.setBackgroundColor(null);
-	canvas.renderAll();
+	resetBackgroundColor();
 	changeHighlight();
 }
 
@@ -1275,12 +1301,31 @@ function postOnFacebook() {
 	// 		}
 	// }
 
+	function gifMake(){
+		var animatedImage;
+		gifshot.createGIF(
+			{images: gifList, gifWidth: 640, gifHeight: 360, interval: 0.2}
+			, function (obj) {
+				if (!obj.error) {
+					var image = obj.image, animatedImage = document.createElement('img');
+					animatedImage.src = image;
+        // document.body.appendchild(animatedImage);
+        var giflink = document.createElement("a");
+        giflink.download = "scribbl";
+        giflink.href = animatedImage.src;
+        giflink.click();
+    }
+});
+
+	}
+
 
 /************************ HISTORY FUNCTIONS *************************/
 var histList;
 var histIndex;
 var histMax;
 var histWorking;
+var gifList;
 function initHistory() {
 	// May not be necessary, this just makes
 	// sure the canvas is initialised first
@@ -1288,6 +1333,10 @@ function initHistory() {
 	histIndex = 0;
 	histMax = 49;
 	histWorking = false;
+
+	clearBackgroundColor();
+	gifList = [canvas.toDataURL()];
+	resetBackgroundColor();	
 }
 
 
@@ -1328,7 +1377,22 @@ function updateHistory() {
 	}
 	histList.push(JSON.stringify(canvas));
 	updateUndoRedoBtn();
+	clearBackgroundColor();
+	if(gifList.length == 100){
+		gifList = resizeGifList();
+	}
+	gifList.push(canvas.toDataURL());
+	resetBackgroundColor();
 }
+
+    function resizeGifList(){
+    	var newGifList = [];
+    	for(var i = 0; i < gifList.length; i ++){
+    		if(i%2 == 0)
+    			newGifList.push(gifList[i]);
+    	}
+    	return newGifList;
+    }
 
 	function undo() {
 		// Only run if history is not busy

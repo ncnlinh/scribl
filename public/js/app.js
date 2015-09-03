@@ -948,7 +948,7 @@ function addCanvasListeners() {
 }
 
 function onObjAdded(e) {
-	if (histWorking) {
+	if (blockHistoryCalls) {
 		// Object "type"s seem to only appear AFTER a canvas
 		// is loaded from a save. This section of code is a workaround
 		// to ensure that brush strokes are not selectable.
@@ -1165,6 +1165,7 @@ function erase(ev) {
 	switch(ev.e.type.toLowerCase()) {
 		case 'mousedown':
 		erasing = true;
+		blockHistoryCalls = true;
 		identifyAndErase(ev);
 		break;
 		case 'mousemove':
@@ -1173,6 +1174,8 @@ function erase(ev) {
 		break;
 		case 'mouseup':
 		erasing = false;
+		blockHistoryCalls = false;
+		updateHistory();
 		break;
 	}
 }
@@ -1450,7 +1453,7 @@ function removeAllHighlight(){
 }
 
 function breakGroup(grp) {
-	histWorking = true;
+	blockHistoryCalls = true;
 	var items = grp._objects;
 	grp._restoreObjectsState();
 	for (var i=0; i<items.length; i++) {
@@ -1459,7 +1462,7 @@ function breakGroup(grp) {
 		items[i].setCoords();
 	}
 	canvas.remove(grp);
-	histWorking = false;
+	blockHistoryCalls = false;
 }
 
 
@@ -1497,7 +1500,7 @@ function gifMake(){
 var histList;
 var histIndex;
 var histMax;
-var histWorking;
+var blockHistoryCalls;
 var gifList;
 function initHistory() {
 	// May not be necessary, this just makes
@@ -1505,7 +1508,7 @@ function initHistory() {
 	histList = [JSON.stringify(canvas)];
 	histIndex = 0;
 	histMax = 49;
-	histWorking = false;
+	blockHistoryCalls = false;
 
 	clearBackgroundColor();
 	gifList = [canvas.toDataURL()];
@@ -1532,7 +1535,7 @@ function updateHistory() {
 	// Objects added on canvas load are 
 	// considered "object:added"; this is a safety net
 	// for when undo or redo is called
-	if (histWorking) return;
+	if (blockHistoryCalls) return;
 
 	// Remove all items after histIndex
 	histLast = histList.length - 1;
@@ -1569,14 +1572,14 @@ function updateHistory() {
 
 	function undo() {
 		// Only run if history is not busy
-		if(!histWorking) {
+		if(!blockHistoryCalls) {
 			if (histIndex>0) {
 				// Tell updateHistory to ignore actions
-				histWorking = true;
+				blockHistoryCalls = true;
 				// Callback ensures no other history can run before completion
 				canvas.loadFromJSON(histList[--histIndex], function() {
 					canvas.renderAll();
-					histWorking = false;
+					blockHistoryCalls = false;
 				});
 				updateUndoRedoBtn();
 			}
@@ -1587,15 +1590,15 @@ function updateHistory() {
 
 	function redo() {
 		// Only run if history is not busy
-		if(!histWorking) {
+		if(!blockHistoryCalls) {
 			histLast = histList.length - 1;
 			if (histIndex<histLast) {
 				// Tell updateHistory to ignore actions
-				histWorking = true;
+				blockHistoryCalls = true;
 				// Callback ensures no other history can run before completion
 				canvas.loadFromJSON(histList[++histIndex], function() {
 					canvas.renderAll();
-					histWorking = false;
+					blockHistoryCalls = false;
 				});
 				updateUndoRedoBtn();
 			}

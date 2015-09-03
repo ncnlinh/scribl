@@ -17,8 +17,9 @@ var paths = {
   'fabric': './bower_components/fabric.js',
   'jquery': './bower_components/jquery',
   'jquery-ui': './bower_components/jquery-ui',
-  'landing-page': './bower_components/startbootstrap-landing-page'
-
+  'landing-page': './bower_components/startbootstrap-landing-page',
+  'font-awesome': './bower_components/font-awesome',
+  'gifshot': './bower_components/gifshot'
 };
 
 elixir(function(mix) {
@@ -27,12 +28,14 @@ elixir(function(mix) {
         paths.bootstrap + '/dist/css/bootstrap.min.css',
         paths.bootstrap + '/dist/css/bootstrap-theme.min.css',
         paths['landing-page'] + '/font-awesome/css/font-awesome.min.css',
+        paths['font-awesome'] + '/css/font-awesome.min.css',
         'landing-page.css',
-        'canvas.css'
+        'canvas.css',
       ], 'public/css/')
       .copy([
-        paths.bootstrap + 'fonts/bootstrap/**',
-        paths['landing-page'] + '/font-awesome/**'
+        paths.bootstrap + '/fonts/bootstrap/**',
+        paths['landing-page'] + '/font-awesome/**',
+        paths['font-awesome'] + '/fonts/**',
       ], 'public/fonts')
       .scripts([
         paths.jquery + '/dist/jquery.min.js',
@@ -40,6 +43,7 @@ elixir(function(mix) {
         paths.fabric + '/dist/fabric.min.js',
         paths.colpick + '/js/colpick.js',
         paths['jquery-ui'] + '/jquery-ui.min.js',
+        paths.gifshot + '/build/gifshot.min.js',
         'canvas.js'
       ], 'public/js/app.js')
       .copy([

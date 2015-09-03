@@ -284,17 +284,17 @@ function initColPickers(){
 function initTooltips() {
 	$('#pointer').popover({
 	  trigger: 'hover',
-	  content: "Select",
+	  content: "Select(S)",
 	  placement: 'left'
 	});
 	$('#pentool').popover({
 	  trigger: 'hover',
-	  content: "Draw",
+	  content: "Draw(B)",
 	  placement: 'left'
 	});
 	$('#eraser').popover({
 	  trigger: 'hover',
-	  content: "Erase",
+	  content: "Erase(E)",
 	  placement: 'left'
 	});
 	$('#clearcanvas').popover({
@@ -304,24 +304,26 @@ function initTooltips() {
 	});
 	$('#undo').popover({
 	  trigger: 'hover',
-	  content: "Undo",
+	  html: true,
+	  content: "Undo<br>(Ctrl+Z)",
 	  placement: 'left'
 	});
 	$('#redo').popover({
 	  trigger: 'hover',
-	  content: "Redo",
+	  html: true,
+	  content: "Redo<br>(Ctrl+Y)",
 	  placement: 'left'
 	});
 	$('#uploadimages').popover({
 	  trigger: 'hover',
 	  html: true,
-	  content: "Insert<br>Image",
+	  content: "Insert<br>Image(I)",
 	  placement: 'left'
 	});
 	$('#text').popover({
 	  trigger: 'hover',
 	  html: true,
-	  content: "Insert<br>Text",
+	  content: "Insert<br>Text(T)",
 	  placement: 'left'
 	});
 	$('#download').popover({
@@ -345,7 +347,8 @@ function addWindowListeners() {
 		if (inTextWindow) {
 			switch(e.which) {
 				case 8: // backspace
-				e.preventDefault();
+				if (document.activeElement.id != "textinput")
+					e.preventDefault();
 				break;
 			}
 		} else {
@@ -366,6 +369,10 @@ function addWindowListeners() {
 				}
 			} else {
 				switch(e.which) {
+					case 8: // backspace
+					if (!canvas.isDrawingMode && !inEraserMode)
+						e.preventDefault();
+					break;
 					case 46: // del
 					deleteActiveObj();
 					break;

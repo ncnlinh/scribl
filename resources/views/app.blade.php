@@ -6,7 +6,6 @@
   <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Scribl!</title>
   <link rel="stylesheet" href="/css/all.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -33,8 +32,8 @@
           <output id="list"></output>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" id="inputtext">OK</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="inputtext" type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          <button id="closetext" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
 
@@ -50,52 +49,55 @@
 
           <ul id ="sidebarmenu" class="btn-group" data-toggle="buttons">
             <li>
-              <button id = "pointer" class="btn btn-default normal" title="Select">
+              <button id = "pointer" class="btn btn-default normal" data-toggle="popover" des="Select">
               </button>
             </li>
             <li>
               <div class="dropdown">
-              <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown" title="Draw"></button>
-              <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="left: 0px; top: 40px">
-                <li role="presentation" class="dropdown-header">
-                  <label for="drawing-line-width">Width: </label>
-                  <input type="range" value="30" min="1" max="150" id="drawing-line-width">
-                  <span id="drawing-line-width-px">30px</span>
-                </li>
-                <li role="presentation" class="divider"></li>
-                <li role="presentation" class="dropdown-header">
-                  <label for="drawing-col">Color:</label>
-                  <span class="color-box" id="drawing-col" />
-                </li>
-              </ul>
+                <button id = "pentool"  class="btn btn-default dropdown-toggle btn btn-primary active highlight" data-toggle="dropdown"></button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="left: 44px; top: -4px">
+                  <li role="presentation" class="dropdown-header">
+                    <label for="drawing-line-width">Width: </label>
+                    <input type="range" value="30" min="1" max="150" id="drawing-line-width">
+                    <span id="drawing-line-width-px">30px</span>
+                  </li>
+                  <li role="presentation" class="divider"></li>
+                  <li role="presentation" class="dropdown-header">
+                    <label for="pen-modes">Stroke: </label><br>
+                    <span id="pen-modes">
+                      <button id="pen-pencil" class="btn btn-primary highlight brush-sel" title="Pencil"></button>
+                      <button id="pen-circle" class="btn btn-primary normal brush-sel" title="Circles"></button> 
+                      <button id="pen-spray" class="btn btn-primary normal brush-sel" title="Spray Can"></button>
+                    </span>
+                  </li>
+                  <li role="presentation" class="divider"></li>
+                  <li role="presentation" class="dropdown-header">
+                    <label for="drawing-col">Color:</label>
+                    <span class="color-box" id="drawing-col" />
+                  </li>
+                </ul>
               </div>
             </li>
-            <li><button id = "eraser" class="btn btn-primary normal" title="Erase"></button>
+            <li><button id = "eraser" class="btn btn-primary normal"></button>
             </li>
-            <li><button id = "clearcanvas" class="btn btn-primary normal" title="Clear"></button>
+            <li><button id = "clearcanvas" class="btn btn-primary normal"></button>
             </li> 
-            <li><button id = "undo" class="btn btn-primary normal" title="Undo" disabled></button>
+            <li><button id = "undo" class="btn btn-primary normal" disabled></button>
             </li>
-            <li><button id = "redo" class="btn btn-primary normal" title="Redo" disabled></button>
+            <li><button id = "redo" class="btn btn-primary normal" disabled></button>
             </li>
-            <li><button id = "uploadimages" class="btn btn-primary normal" title="Insert Image"></button>
+            <li><button id = "uploadimages" class="btn btn-primary normal"></button>
             </li>
-            <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext" title="Insert Text"></button>
+            <li><button id = "text" class="btn btn-primary normal" data-toggle="modal" data-target="#myModaltext"></button>
             </li>
-            <li><button id = "download" class="btn btn-primary normal" title="Download Scribl"></button>
+            <li><button id = "download" class="btn btn-primary normal"></button>
             </li> 
-             <li><button id = "gif" class="btn btn-primary normal" title="Download Gif">gif</button>
-          </li> 
-            <li>
-              <label for="drawing-mode-selector" style="color:white">Pen Mode:</label><br>
-              <select id="drawing-mode-selector">
-                <option>Pencil</option>
-                <option>Circle</option>
-                <option>Spray</option>
-              </select><br>
-            </li>
+            <li><button id = "gif" class="btn btn-primary normal">gif</button>
+            </li> 
           </ul>
         <br><br>
+      </div>
+      <div align="center">
         <a href={{url('logout')}}>
           <button type="button" class="fb-btn">
               <img src="../images/FB-f-Logo__blue_29.png" />Logout
@@ -114,7 +116,6 @@
     </td>
   </tr>
 
-<script src="https://rawgit.com/yahoo/gifshot/master/build/gifshot.js" type="text/javascript"></script>
   <script src="js/app.js" type="text/javascript"></script></table>
   @if (Session::has('post'))
     <div id="postModal" class="modal fade" role="dialog">

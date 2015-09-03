@@ -47,28 +47,27 @@ var isSaved;				// Counter for whether changes have been made
 var idleTime = 0;			// Counter for number of minutes user is idle
 var idleInterval;			// Holds ID for setInterval() idle timer (for reset)
 
-var	drawingModeEl,
-	drawingOptionsEl,
-	drawingColorEl,
-	drawingShadowColorEl,
-	drawingLineWidthEl,
-	drawingShadowWidth,
-	drawingShadowOffset,
-	eraserModeEl,
-	undoEl,
-	redoEl,
-	clearEl,
-	imageBtnEl;
+var	drawingLineWidthEl;
 
 var pointer,
 	penTool,
+	penPencil,
+	penCircle,
+	penSpray,
 	eraserTool,
 	clearCan,
 	undoButton,
 	redoButton,
 	uploadButton,
+	textBtn,
+	textClose,
 	textInput,
-	downloadEl;
+	downloadBtn,
+	boldBtn,
+	italicBtn,
+	underlineBtn,
+	gifmaker,
+	postOnFb;
 
 
 
@@ -89,6 +88,7 @@ var pointer,
 	resizeCanvas();
 	//promptBoardEmpty();
 	initColPickers();
+	initTooltips();
 	initHistory();
 
 	fabric.Object.prototype.transparentCorners = false;
@@ -96,27 +96,22 @@ var pointer,
 	fabric.Text.prototype.perPixelTargetFind = false;
 	fabric.Image.prototype.perPixelTargetFind = false;
 
-	drawingOptionsEl = $('drawing-mode-options'),
-	// drawingColorEl = $('drawing-color'),
-	drawingShadowColorEl = $('drawing-shadow-color'),
-	drawingLineWidthEl = $('drawing-line-width'),
-	drawingShadowWidth = $('drawing-shadow-width'),
-	drawingShadowOffset = $('drawing-shadow-offset');
-	eraserModeEl = $('eraser-mode');
-	clearEl = $('clear-canvas');
-	undoEl = $('undo-btn');
-	redoEl = $('redo-btn');
-	imageBtnEl = $('addimage');
+	drawingLineWidthEl = $('drawing-line-width');
 
 	pointer 		= $('pointer');
 	penTool 		= $('pentool');
+	penPencil 		= $('pen-pencil');
+	penCircle		= $('pen-circle');
+	penSpray		= $('pen-spray');
 	eraserTool 		= $('eraser');
 	clearCan 		= $('clearcanvas');
 	undoButton 		= $('undo');
 	redoButton 		= $('redo');
 	uploadButton 	= $('uploadimages');
+	textBtn 		= $('text');
+	textClose 		= $('closetext');
 	textInput 		= $('inputtext');
-	downloadEl 		= $('download');
+	downloadBtn 		= $('download');
 	boldBtn         = $('textBold');
 	italicBtn       = $('textItalic');
 	underlineBtn    = $('textUnderline');
@@ -126,128 +121,133 @@ var pointer,
 
 	pointer.onclick 		= disableDrawAndEraser;
 	penTool.onclick 		= drawingModeOn;
+	penPencil.onclick		= penModePencil;
+	penCircle.onclick 		= penModeCircle;
+	penSpray.onclick 		= penModeSpray;
 	eraserTool.onclick 		= eraserModeOn;
 	clearCan.onclick 		= clearCanvas;
 	undoButton.onclick 		= undo;
 	redoButton.onclick 		= redo;
 	uploadButton.onclick 	= openUploader;
+	textBtn.onclick			= textModeOn;
+	textClose.onclick		= textModeOff;
 	textInput.onclick 		= addText;
-	downloadEl.onclick 		= downloadCanvas;
+	downloadBtn.onclick 	= downloadCanvas;
 	boldBtn.onclick 		= toggleTextBold;
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
-	postOnFb.onclick = postOnFacebook;
-	gifmaker.onclick = gifMake;
+	postOnFb.onclick 		= postOnFacebook;
+	gifmaker.onclick 		= gifMake;
 
 	// TODO: CONSIDER REMOVING PATTERN BRUSH
-	if (fabric.PatternBrush) {
-		var vLinePatternBrush = new fabric.PatternBrush(canvas);
-		vLinePatternBrush.getPatternSrc = function() {
+	// if (fabric.PatternBrush) {
+	// 	var vLinePatternBrush = new fabric.PatternBrush(canvas);
+	// 	vLinePatternBrush.getPatternSrc = function() {
 
-			var patternCanvas = fabric.document.createElement('canvas');
-			patternCanvas.width = patternCanvas.height = 10;
-			var ctx = patternCanvas.getContext('2d');
+	// 		var patternCanvas = fabric.document.createElement('canvas');
+	// 		patternCanvas.width = patternCanvas.height = 10;
+	// 		var ctx = patternCanvas.getContext('2d');
 
-			ctx.strokeStyle = this.color;
-			ctx.lineWidth = 5;
-			ctx.beginPath();
-			ctx.moveTo(0, 5);
-			ctx.lineTo(10, 5);
-			ctx.closePath();
-			ctx.stroke();
+	// 		ctx.strokeStyle = this.color;
+	// 		ctx.lineWidth = 5;
+	// 		ctx.beginPath();
+	// 		ctx.moveTo(0, 5);
+	// 		ctx.lineTo(10, 5);
+	// 		ctx.closePath();
+	// 		ctx.stroke();
 
-			return patternCanvas;
-		};
+	// 		return patternCanvas;
+	// 	};
 
-		var hLinePatternBrush = new fabric.PatternBrush(canvas);
-		hLinePatternBrush.getPatternSrc = function() {
+	// 	var hLinePatternBrush = new fabric.PatternBrush(canvas);
+	// 	hLinePatternBrush.getPatternSrc = function() {
 
-			var patternCanvas = fabric.document.createElement('canvas');
-			patternCanvas.width = patternCanvas.height = 10;
-			var ctx = patternCanvas.getContext('2d');
+	// 		var patternCanvas = fabric.document.createElement('canvas');
+	// 		patternCanvas.width = patternCanvas.height = 10;
+	// 		var ctx = patternCanvas.getContext('2d');
 
-			ctx.strokeStyle = this.color;
-			ctx.lineWidth = 5;
-			ctx.beginPath();
-			ctx.moveTo(5, 0);
-			ctx.lineTo(5, 10);
-			ctx.closePath();
-			ctx.stroke();
+	// 		ctx.strokeStyle = this.color;
+	// 		ctx.lineWidth = 5;
+	// 		ctx.beginPath();
+	// 		ctx.moveTo(5, 0);
+	// 		ctx.lineTo(5, 10);
+	// 		ctx.closePath();
+	// 		ctx.stroke();
 
-			return patternCanvas;
-		};
+	// 		return patternCanvas;
+	// 	};
 
-		var squarePatternBrush = new fabric.PatternBrush(canvas);
-		squarePatternBrush.getPatternSrc = function() {
+	// 	var squarePatternBrush = new fabric.PatternBrush(canvas);
+	// 	squarePatternBrush.getPatternSrc = function() {
 
-			var squareWidth = 10, squareDistance = 2;
+	// 		var squareWidth = 10, squareDistance = 2;
 
-			var patternCanvas = fabric.document.createElement('canvas');
-			patternCanvas.width = patternCanvas.height = squareWidth + squareDistance;
-			var ctx = patternCanvas.getContext('2d');
+	// 		var patternCanvas = fabric.document.createElement('canvas');
+	// 		patternCanvas.width = patternCanvas.height = squareWidth + squareDistance;
+	// 		var ctx = patternCanvas.getContext('2d');
 
-			ctx.fillStyle = this.color;
-			ctx.fillRect(0, 0, squareWidth, squareWidth);
+	// 		ctx.fillStyle = this.color;
+	// 		ctx.fillRect(0, 0, squareWidth, squareWidth);
 
-			return patternCanvas;
-		};
+	// 		return patternCanvas;
+	// 	};
 
-		var diamondPatternBrush = new fabric.PatternBrush(canvas);
-		diamondPatternBrush.getPatternSrc = function() {
+	// 	var diamondPatternBrush = new fabric.PatternBrush(canvas);
+	// 	diamondPatternBrush.getPatternSrc = function() {
 
-			var squareWidth = 10, squareDistance = 5;
-			var patternCanvas = fabric.document.createElement('canvas');
-			var rect = new fabric.Rect({
-				width: squareWidth,
-				height: squareWidth,
-				angle: 45,
-				fill: this.color
-			});
+	// 		var squareWidth = 10, squareDistance = 5;
+	// 		var patternCanvas = fabric.document.createElement('canvas');
+	// 		var rect = new fabric.Rect({
+	// 			width: squareWidth,
+	// 			height: squareWidth,
+	// 			angle: 45,
+	// 			fill: this.color
+	// 		});
 
-			var canvasWidth = rect.getBoundingRectWidth();
+	// 		var canvasWidth = rect.getBoundingRectWidth();
 
-			patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance;
-			rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 });
+	// 		patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance;
+	// 		rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 });
 
-			var ctx = patternCanvas.getContext('2d');
-			rect.render(ctx);
+	// 		var ctx = patternCanvas.getContext('2d');
+	// 		rect.render(ctx);
 
-			return patternCanvas;
-		};
+	// 		return patternCanvas;
+	// 	};
 
-		var img = new Image();
-		img.src = '../images/testPattern.png';
+	// 	var img = new Image();
+	// 	img.src = '../images/testPattern.png';
 
-		var texturePatternBrush = new fabric.PatternBrush(canvas);
-		texturePatternBrush.source = img;
-	}
+	// 	var texturePatternBrush = new fabric.PatternBrush(canvas);
+	// 	texturePatternBrush.source = img;
+	// }
 
-	$('drawing-mode-selector').onchange = function() {
+	// $('drawing-mode-selector').onchange = function() {
 
-		if (this.value === 'hline') {
-			canvas.freeDrawingBrush = vLinePatternBrush;
-		}
-		else if (this.value === 'vline') {
-			canvas.freeDrawingBrush = hLinePatternBrush;
-		}
-		else if (this.value === 'square') {
-			canvas.freeDrawingBrush = squarePatternBrush;
-		}
-		else if (this.value === 'diamond') {
-			canvas.freeDrawingBrush = diamondPatternBrush;
-		}
-		else if (this.value === 'texture') {
-			canvas.freeDrawingBrush = texturePatternBrush;
-		}
-		else {
-			canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
-		}
+	// 	if (this.value === 'hline') {
+	// 		canvas.freeDrawingBrush = vLinePatternBrush;
+	// 	}
+	// 	else if (this.value === 'vline') {
+	// 		canvas.freeDrawingBrush = hLinePatternBrush;
+	// 	}
+	// 	else if (this.value === 'square') {
+	// 		canvas.freeDrawingBrush = squarePatternBrush;
+	// 	}
+	// 	else if (this.value === 'diamond') {
+	// 		canvas.freeDrawingBrush = diamondPatternBrush;
+	// 	}
+	// 	else if (this.value === 'texture') {
+	// 		canvas.freeDrawingBrush = texturePatternBrush;
+	// 	}
+	// 	else {
+	// 		canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
+	// 	}
 
-		if (canvas.freeDrawingBrush) {
-			canvas.freeDrawingBrush.color = drawcolor;
-			canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-		}
-	};
+	// 	if (canvas.freeDrawingBrush) {
+	// 		canvas.freeDrawingBrush.color = drawcolor;
+	// 		canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+	// 	}
+	// };
 
 	// drawingColorEl.onchange = function() {
 	// 	canvas.freeDrawingBrush.color = this.value;
@@ -257,7 +257,6 @@ var pointer,
 		$('drawing-line-width-px').innerHTML = this.value + "px";
 	};
 	drawingLineWidthEl.value = 30;
-
 
 	if (canvas.freeDrawingBrush) {
 		canvas.freeDrawingBrush.color = drawcolor;
@@ -282,33 +281,114 @@ function initColPickers(){
 	}).css('background-color', drawcolor);
 }
 
+function initTooltips() {
+	$('#pointer').popover({
+	  trigger: 'hover',
+	  content: "Select",
+	  placement: 'left'
+	});
+	$('#pentool').popover({
+	  trigger: 'hover',
+	  content: "Draw",
+	  placement: 'left'
+	});
+	$('#eraser').popover({
+	  trigger: 'hover',
+	  content: "Erase",
+	  placement: 'left'
+	});
+	$('#clearcanvas').popover({
+	  trigger: 'hover',
+	  content: "Clear",
+	  placement: 'left'
+	});
+	$('#undo').popover({
+	  trigger: 'hover',
+	  content: "Undo",
+	  placement: 'left'
+	});
+	$('#redo').popover({
+	  trigger: 'hover',
+	  content: "Redo",
+	  placement: 'left'
+	});
+	$('#uploadimages').popover({
+	  trigger: 'hover',
+	  html: true,
+	  content: "Insert<br>Image",
+	  placement: 'left'
+	});
+	$('#text').popover({
+	  trigger: 'hover',
+	  html: true,
+	  content: "Insert<br>Text",
+	  placement: 'left'
+	});
+	$('#download').popover({
+	  trigger: 'hover',
+	  html: true,
+	  content: "Save<br>Image",
+	  placement: 'left'
+	});
+	$('#gif').popover({
+	  trigger: 'hover',
+	  html:true,
+	  content: "Save<br>GIF",
+	  placement: 'left'
+	});
+}
 
 
 /************************ BOARD LISTENERS *************************/
 function addWindowListeners() {
 	$(document).on('keydown', function(e){
-		if(e.ctrlKey) {  // If ctrl is pressed
-			switch(e.which){
-				case 89: // Y
-				redo();
-				e.preventDefault();
-				break;
-				case 90: // Z
-				undo();
+		if (inTextWindow) {
+			switch(e.which) {
+				case 8: // backspace
 				e.preventDefault();
 				break;
 			}
 		} else {
-			switch(e.which) {
-				case 8: // backspace
-				if (!canvas.isDrawingMode && !inEraserMode)
+			if(e.ctrlKey) {  // If ctrl is pressed
+				switch(e.which){
+					case 89: // Y
+					redo();
 					e.preventDefault();
-				break;
-				case 46: // del
-				deleteActiveObj();
-				break;
+					break;
+					case 90: // Z
+					undo();
+					e.preventDefault();
+					break;
+					case 83: // S
+					downloadBtn.click();
+					e.preventDefault();
+					break;
+				}
+			} else {
+				switch(e.which) {
+					case 46: // del
+					deleteActiveObj();
+					break;
+					case 66: // b
+					penTool.click();
+					break;
+					case 69: // e
+					eraserTool.click();
+					break;
+					case 73: // i
+					uploadButton.click();
+					break;
+					case 84: // t
+					textBtn.click();
+					break;
+					case 86: // v
+					pointer.click();
+					break;
+					
+				}
 			}
 		}
+		
 	});
 	window.addEventListener('resize', resizeCanvas, false);
 	// window.onbeforeunload = function(e){	// Page-leave functionality
@@ -335,14 +415,18 @@ function addCanvasListeners() {
 }
 
 function onObjAdded(e) {
-	if (histWorking) {
+	if (blockHistoryCalls) {
 		// Object "type"s seem to only appear AFTER a canvas
 		// is loaded from a save. This section of code is a workaround
 		// to ensure that brush strokes are not selectable.
 		var curr = canvasLastObj();
-		if (curr.type == "path" || curr.type == "group")
+		if (curr.type == "path" || curr.type == "group" || curr.type == "circle")
 			setLastObjUnselectable();
 	} else {
+		var curr = canvasLastObj();
+		if (curr.type=="group" && curr._objects[0].type=="circle") {
+			breakGroup(curr);
+		}
 		updateHistory();
 	}
 }
@@ -424,7 +508,7 @@ function toggleDrawingMode() {
 function drawingModeOn() {
 	eraserModeOff();
 	if($("#pentool").hasClass("normal")){
-	removeHightlight();
+	removeAllHighlight();
 	$("#pentool").removeClass("normal").addClass("highlight");
 	}
 	canvas.isDrawingMode = true;
@@ -433,6 +517,57 @@ function drawingModeOn() {
 
 function drawingModeOff() {
 	canvas.isDrawingMode = false;
+}
+
+var currPenMode = 'Pencil';
+function penModePencil() {
+	currPenMode = 'Pencil';
+	if($("#pen-pencil").hasClass("normal"))
+		$("#pen-pencil").removeClass("normal").addClass("highlight");
+	if($("#pen-circle").hasClass("highlight"))
+		$("#pen-circle").removeClass("highlight").addClass("normal");
+	if($("#pen-spray").hasClass("highlight"))
+		$("#pen-spray").removeClass("highlight").addClass("normal");
+	canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+	canvas.freeDrawingBrush.color = drawcolor;
+	canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+}
+function penModeCircle() {
+	currPenMode = 'Circle';
+	if($("#pen-circle").hasClass("normal"))
+		$("#pen-circle").removeClass("normal").addClass("highlight");
+	if($("#pen-pencil").hasClass("highlight"))
+		$("#pen-pencil").removeClass("highlight").addClass("normal");
+	if($("#pen-spray").hasClass("highlight"))
+		$("#pen-spray").removeClass("highlight").addClass("normal");
+	canvas.freeDrawingBrush = new fabric.CircleBrush(canvas);
+	canvas.freeDrawingBrush.color = drawcolor;
+	canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+}
+function penModeSpray() {
+	currPenMode = 'Spray';
+	if($("#pen-spray").hasClass("normal"))
+		$("#pen-spray").removeClass("normal").addClass("highlight");
+	if($("#pen-circle").hasClass("highlight"))
+		$("#pen-circle").removeClass("highlight").addClass("normal");
+	if($("#pen-pencil").hasClass("highlight"))
+		$("#pen-pencil").removeClass("highlight").addClass("normal");
+	canvas.freeDrawingBrush = new fabric.SprayBrush(canvas);
+	canvas.freeDrawingBrush.color = drawcolor;
+	canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+}
+function updatePenMode() {
+	switch(currPenMode) {
+		case "Pencil":
+			penModePencil();
+			break;
+		case "Circle":
+			penModeCircle();
+			break;
+		case "Spray":
+			penModeSpray();
+			break;
+	}
 }
 
 
@@ -448,7 +583,7 @@ function toggleEraserMode() {
 function eraserModeOn() {
 	drawingModeOff();
 	if($("#eraser").hasClass("normal")){
-		removeHightlight();
+		removeAllHighlight();
 		$("#eraser").removeClass("normal").addClass("highlight");
 	}
 
@@ -471,37 +606,35 @@ function eraserModeOff() {
 	canvas.defaultCursor = 'default';
 
 	canvas.forEachObject(function(o) {
-		if(o.type !== 'path' && o.type !== 'group')
+		if(!isDrawnObject(o))
 			o.selectable = true;
 	});
 	// fabric.Object.prototype.perPixelTargetFind = false;
 	canvas.renderAll();
 }
 
+function isDrawnObject(obj) {
+	return (obj.type=='path' || obj.type=="group" || obj.type=="circle");
+}
+
 function disableDrawAndEraser() {
 	drawingModeOff();
 	eraserModeOff();
 	if($("#pointer").hasClass("normal")){
-	removeHightlight();
+	removeAllHighlight();
 	$("#pointer").removeClass("normal").addClass("highlight");
 	}
 }
 
-function removeHightlight(){
-	$("#sidebarmenu").find(":button").each(function(){
-		if($(this).hasClass("highlight")){
-			$(this).removeClass("highlight").addClass("normal");
-		}			
-	})
-	
-}
-
 
 var erasing = false;
+var erased = false;
 function erase(ev) {
 	switch(ev.e.type.toLowerCase()) {
 		case 'mousedown':
 		erasing = true;
+		erased = false;
+		blockHistoryCalls = true;
 		identifyAndErase(ev);
 		break;
 		case 'mousemove':
@@ -510,6 +643,9 @@ function erase(ev) {
 		break;
 		case 'mouseup':
 		erasing = false;
+		blockHistoryCalls = false;
+		if (erased)
+			updateHistory();
 		break;
 	}
 }
@@ -520,8 +656,10 @@ function identifyAndErase(ev) {
 	if (target !== undefined) {
 		if (target.type =="path") {
 			eraseArea(target,mouseEv);
-		} else if (target.type == "group") {
+			erased = true;
+		} else if (target.type=="group" || target.type=="circle") {
 			canvas.remove(target);
+			erased = true;
 		}
 	}
 }
@@ -538,6 +676,8 @@ function eraseArea(target, mouseEv) {
 	var numNodes = target.path.length;
 	var toSplit = [0];
 	var numDel = 0;
+	// 'Delete' nodes by making current node an end (L) at the previous node,
+	// and making a start at the next point (M)
 	for (var i=0; i<numNodes; i++) {
 		var curr = target.path[i];
 		if (withinCursorRadius(target,curr[1],curr[2],mouseEv)) {
@@ -559,7 +699,6 @@ function eraseArea(target, mouseEv) {
 	}
 	if (numDel>=numNodes-2)
 		canvas.remove(target);
-	updateHistory();
 	canvas.renderAll();
 }
 
@@ -693,7 +832,7 @@ function clearBackgroundColor(){
 	currBgImg = canvas.backgroundImage;
 	
 	if (canvas.backgroundColor=='' && canvas.backgroundImage==null)
-    canvas.setBackgroundColor('#FFFFFF');
+    	canvas.setBackgroundColor('#FFFFFF');
 
 	activeObj = canvas.getActiveObject();
 	canvas.discardActiveObject();
@@ -701,13 +840,12 @@ function clearBackgroundColor(){
 }
 
 function resetBackgroundColor(){
-	if (currBgCol) 
-		canvas.setBackgroundColor(currBgCol);
-	else if (currBgImg) 
+	if (currBgImg) 
 		canvas.setBackgroundImage(currBgImg);
-	else{
-	canvas.setBackgroundColor(null);
-	}
+	else if (currBgCol!='') 
+		canvas.setBackgroundColor(currBgCol);
+	else
+		canvas.setBackgroundColor('');
 
 	if(activeObj)
 		canvas.setActiveObject(activeObj);
@@ -719,6 +857,10 @@ function resetBackgroundColor(){
 }
 
 function downloadCanvas() {
+<<<<<<< HEAD
+=======
+	removeAllHighlight();
+>>>>>>> origin/master
 	// Normally transparent because default dataURL is .png
 	clearBackgroundColor();
 	
@@ -734,16 +876,7 @@ function downloadCanvas() {
 	resetBackgroundColor();
 }
 
-/** RESIZE CODE FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/
-// Display custom canvas.
-// In this case it's a blue, 5 pixel border that 
-// resizes along with the browser window.					
-// function redraw() {
-// 	context.strokeStyle = 'blue';
-// 	context.lineWidth = '5';
-// 	context.strokeRect(0, 0, window.innerWidth, window.innerHeight);
-// }
-
+/** RESIZE CODE ADAPTED FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/
 // Runs each time the DOM window resize event fires.
 // Resets the canvas dimensions to match window,
 // then draws the new borders accordingly.
@@ -783,6 +916,7 @@ function postOnFacebook() {
     });
 }
 
+<<<<<<< HEAD
 	function removeHightlight(){
 		$("#sidebarmenu").find(":button").each(function(){
 			if($(this).hasClass("highlight")){
@@ -790,7 +924,30 @@ function postOnFacebook() {
 			}		
 		})
 		canvas.renderAll(); 
+=======
+function removeAllHighlight(){
+	$("#sidebarmenu").find(":button").each(function(){
+		if($(this).hasClass("highlight")){
+			$(this).removeClass("highlight").addClass("normal");
+		}			
+	});
+	updatePenMode();
+}
+
+function breakGroup(grp) {
+	blockHistoryCalls = true;
+	var items = grp._objects;
+	grp._restoreObjectsState();
+	for (var i=0; i<items.length; i++) {
+		canvas.add(items[i]);
+		items[i].selectable = false;
+		items[i].setCoords();
+>>>>>>> origin/master
 	}
+	canvas.remove(grp);
+	blockHistoryCalls = false;
+}
+
 
 	// function changeHighlight(){
 	// 		if(canvas.isDrawingMode && $("#pentool").hasClass("normal")){
@@ -804,6 +961,7 @@ function postOnFacebook() {
 	// 		}
 	// }
 
+<<<<<<< HEAD
 	function gifMake(){
 
 		var animatedImage;
@@ -823,13 +981,31 @@ function postOnFacebook() {
 });
 
 	}
+=======
+function gifMake(){
+	var animatedImage;
+	gifshot.createGIF(
+		{images: gifList, gifWidth: 640, gifHeight: 360, interval: 0.2}
+		, function (obj) {
+			if (!obj.error) {
+				var image = obj.image, animatedImage = document.createElement('img');
+				animatedImage.src = image;
+				// document.body.appendchild(animatedImage);
+				var giflink = document.createElement("a");
+				giflink.download = "scribl";
+				giflink.href = animatedImage.src;
+				giflink.click();
+		    }
+	});
+}
+>>>>>>> origin/master
 
 
 /************************ HISTORY FUNCTIONS *************************/
 var histList;
 var histIndex;
 var histMax;
-var histWorking;
+var blockHistoryCalls;
 var gifList;
 var count = 0, interval = 1;
 function initHistory() {
@@ -838,7 +1014,7 @@ function initHistory() {
 	histList = [JSON.stringify(canvas)];
 	histIndex = 0;
 	histMax = 49;
-	histWorking = false;
+	blockHistoryCalls = false;
 
 	clearBackgroundColor();
 	gifList = [canvas.toDataURL()];
@@ -865,7 +1041,7 @@ function updateHistory() {
 	// Objects added on canvas load are 
 	// considered "object:added"; this is a safety net
 	// for when undo or redo is called
-	if (histWorking) return;
+	if (blockHistoryCalls) return;
 
 	// Remove all items after histIndex
 	histLast = histList.length - 1;
@@ -906,14 +1082,14 @@ function updateHistory() {
 
 	function undo() {
 		// Only run if history is not busy
-		if(!histWorking) {
+		if(!blockHistoryCalls) {
 			if (histIndex>0) {
 				// Tell updateHistory to ignore actions
-				histWorking = true;
+				blockHistoryCalls = true;
 				// Callback ensures no other history can run before completion
 				canvas.loadFromJSON(histList[--histIndex], function() {
 					canvas.renderAll();
-					histWorking = false;
+					blockHistoryCalls = false;
 				});
 				updateUndoRedoBtn();
 			}
@@ -924,15 +1100,15 @@ function updateHistory() {
 
 	function redo() {
 		// Only run if history is not busy
-		if(!histWorking) {
+		if(!blockHistoryCalls) {
 			histLast = histList.length - 1;
 			if (histIndex<histLast) {
 				// Tell updateHistory to ignore actions
-				histWorking = true;
+				blockHistoryCalls = true;
 				// Callback ensures no other history can run before completion
 				canvas.loadFromJSON(histList[++histIndex], function() {
 					canvas.renderAll();
-					histWorking = false;
+					blockHistoryCalls = false;
 				});
 				updateUndoRedoBtn();
 			}
@@ -1045,12 +1221,8 @@ function setDefSettings(curr){	// *** consider adding these features to toJSON(o
 var isTextBold = false;
 var isTextItalic = false;
 var isTextUnderline = false;
-
+var inTextWindow = false;
 function addText() {
-
-
-	disableDrawAndEraser();
-
 	var input = document.getElementById("textinput");
 	var text = input.value;
 	if(text == null || text.trim() == ""){
@@ -1093,6 +1265,16 @@ function addText() {
 
 
 	clearText();
+	textModeOff();
+}
+
+function textModeOn() {
+	disableDrawAndEraser();
+	inTextWindow = true;
+}
+
+function textModeOff() {
+	inTextWindow = false;
 }
 
 function clearText(){

@@ -127,12 +127,22 @@ input[type=range] {
   background-size: 40px;
   
 }
-#pentool.highlight{
+
+/*#pentool.highlight{
   background-color: #FFAF47;
 }
 #pentool.normal{
   background-color: #E9E9E9;
+}*/
+
+button.highlight{
+  background-color: #FFAF47;
 }
+button.normal{
+  background-color: #E9E9E9;
+}
+
+
 #eraser{
   background:url("../images/eraser.png");
 }
@@ -153,6 +163,15 @@ input[type=range] {
 }
 #download{
   background:url("../images/download.png");
+}
+#pen-pencil{
+  background:url("../images/pen-pencil.png");
+}
+#pen-circle{
+  background:url("../images/pen-circle.png");
+}
+#pen-spray{
+  background:url("../images/pen-spray.png");
 }
 
 #postOnFacebook{

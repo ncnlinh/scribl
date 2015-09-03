@@ -6,7 +6,6 @@
   <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Scribl!</title>
   <link rel="stylesheet" href="/css/all.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -117,7 +116,6 @@
     </td>
   </tr>
 
-<script src="https://rawgit.com/yahoo/gifshot/master/build/gifshot.js" type="text/javascript"></script>
   <script src="js/app.js" type="text/javascript"></script></table>
   @if (Session::has('post'))
     <div id="postModal" class="modal fade" role="dialog">

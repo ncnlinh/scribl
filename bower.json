@@ -14,6 +14,8 @@
     "bootstrap": "~3.3.5",
     "colpick": "~2.0.2",
     "fabric.js": "fabric#~1.5.0",
+    "font-awesome": "fontawesome#~4.4.0",
+    "gifshot": "~0.3.2",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
     "startbootstrap-landing-page": "git://github.com/IronSummitMedia/startbootstrap-landing-page#~1.0.4"

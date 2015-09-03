@@ -607,7 +607,7 @@ var currSave;				// Holds current state (for redo)
 var isSaved;				// Counter for whether changes have been made
 var idleTime = 0;			// Counter for number of minutes user is idle
 var idleInterval;			// Holds ID for setInterval() idle timer (for reset)
-
+var initHeight,initWidth;
 var	drawingLineWidthEl;
 
 var pointer,
@@ -641,8 +641,10 @@ var pointer,
 		isDrawingMode: true,
 		selection: false
 	});
-	canvas.setWidth(window.innerWidth-200);
-	canvas.setHeight(window.innerHeight-100);
+	initHeight = window.innerHeight-100;
+	initWidth = window.innerWidth-200;
+	canvas.setWidth(initWidth);
+	canvas.setHeight(initHeight);
 
 	addCanvasListeners();
 	addWindowListeners();
@@ -1418,7 +1420,6 @@ function resetBackgroundColor(){
 }
 
 function downloadCanvas() {
-	removeAllHighlight();
 	// Normally transparent because default dataURL is .png
 	clearBackgroundColor();
 	
@@ -1432,7 +1433,6 @@ function downloadCanvas() {
 	// Restore background state
 	// TODO: CONSIDER USING .JPG FORMAT
 	resetBackgroundColor();
-	// changeHighlight();
 }
 
 /** RESIZE CODE ADAPTED FROM http://htmlcheats.com/html/resize-the-html5-canvas-dyamically/ **/
@@ -1475,6 +1475,7 @@ function postOnFacebook() {
     });
 }
 
+
 function removeAllHighlight(){
 	$("#sidebarmenu").find(":button").each(function(){
 		if($(this).hasClass("highlight")){
@@ -1510,10 +1511,12 @@ function breakGroup(grp) {
 	// 		}
 	// }
 
+
 function gifMake(){
 	var animatedImage;
+	var width = initWidth/initHeight * 360;
 	gifshot.createGIF(
-		{images: gifList, gifWidth: 640, gifHeight: 360, interval: 0.2}
+		{images: gifList, gifWidth: width, gifHeight: 360, interval: 0.2}
 		, function (obj) {
 			if (!obj.error) {
 				var image = obj.image, animatedImage = document.createElement('img');
@@ -1528,12 +1531,14 @@ function gifMake(){
 }
 
 
+
 /************************ HISTORY FUNCTIONS *************************/
 var histList;
 var histIndex;
 var histMax;
 var blockHistoryCalls;
 var gifList;
+var count = 0, interval = 2;
 function initHistory() {
 	// May not be necessary, this just makes
 	// sure the canvas is initialised first
@@ -1586,14 +1591,18 @@ function updateHistory() {
 	histList.push(JSON.stringify(canvas));
 	updateUndoRedoBtn();
 	clearBackgroundColor();
-	if(gifList.length == 100){
+	if(gifList.length == 75){
 		gifList = resizeGifList();
 	}
-	gifList.push(canvas.toDataURL());
+	count = (count + 1)%interval;
+	if(count == 0){
+		gifList.push(canvas.toDataURL());
+	}
 	resetBackgroundColor();
 }
 
     function resizeGifList(){
+    	interval = interval *2;
     	var newGifList = [];
     	for(var i = 0; i < gifList.length; i ++){
     		if(i%2 == 0)
@@ -1712,6 +1721,9 @@ function saveCanvas(wAlert){
 		var resp=confirm("Are you sure? This will clear everything!");
 		if (resp){
 			canvas.clear();
+			gifList = [];
+			count = 0;
+			interval = 2;
 		}
 	}
 
@@ -1774,9 +1786,14 @@ function addText() {
 		: (underlineProperty + ' underline');
 		newText.set('textDecoration',value).setCoords();
 	}
+
+	input.value="";
+
 	canvas.add(newText);
 	canvas.setActiveObject(canvasLastObj());
 	isSaved = false;
+
+
 
 	clearText();
 	textModeOff();
@@ -1792,7 +1809,7 @@ function textModeOff() {
 }
 
 function clearText(){
-		isTextBold = false;
+	isTextBold = false;
     isTextItalic = false;
     isTextUnderline = false;
 
@@ -1805,8 +1822,6 @@ function clearText(){
    if($("#textUnderline").hasClass("btn btn-success")){
     	$("#textUnderline").removeClass("btn btn-success").addClass("btn btn-default");
     }
-
-    $("#textinput").value ="";
 }
 
 function toggleTextBold(){

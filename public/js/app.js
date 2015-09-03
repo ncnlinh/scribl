@@ -1418,10 +1418,7 @@ function resetBackgroundColor(){
 }
 
 function downloadCanvas() {
-<<<<<<< HEAD
-=======
 	removeAllHighlight();
->>>>>>> origin/master
 	// Normally transparent because default dataURL is .png
 	clearBackgroundColor();
 	
@@ -1477,15 +1474,6 @@ function postOnFacebook() {
     });
 }
 
-<<<<<<< HEAD
-	function removeHightlight(){
-		$("#sidebarmenu").find(":button").each(function(){
-			if($(this).hasClass("highlight")){
-				$(this).removeClass("highlight").addClass("normal");
-			}		
-		})
-		canvas.renderAll(); 
-=======
 function removeAllHighlight(){
 	$("#sidebarmenu").find(":button").each(function(){
 		if($(this).hasClass("highlight")){
@@ -1503,7 +1491,6 @@ function breakGroup(grp) {
 		canvas.add(items[i]);
 		items[i].selectable = false;
 		items[i].setCoords();
->>>>>>> origin/master
 	}
 	canvas.remove(grp);
 	blockHistoryCalls = false;
@@ -1522,7 +1509,6 @@ function breakGroup(grp) {
 	// 		}
 	// }
 
-<<<<<<< HEAD
 	function gifMake(){
 
 		var animatedImage;
@@ -1532,34 +1518,16 @@ function breakGroup(grp) {
 				if (!obj.error) {
 					var image = obj.image, animatedImage = document.createElement('img');
 					animatedImage.src = image;
-        // document.body.appendchild(animatedImage);
-        var giflink = document.createElement("a");
-        giflink.download = "scribl";
-        giflink.href = animatedImage.src;
-        giflink.click();
+                    // document.body.appendchild(animatedImage);
+                    var giflink = document.createElement("a");
+                    giflink.download = "scribl";
+                    giflink.href = animatedImage.src;
+                    giflink.click();
 
-    }
-});
+                }
+            });
 
 	}
-=======
-function gifMake(){
-	var animatedImage;
-	gifshot.createGIF(
-		{images: gifList, gifWidth: 640, gifHeight: 360, interval: 0.2}
-		, function (obj) {
-			if (!obj.error) {
-				var image = obj.image, animatedImage = document.createElement('img');
-				animatedImage.src = image;
-				// document.body.appendchild(animatedImage);
-				var giflink = document.createElement("a");
-				giflink.download = "scribl";
-				giflink.href = animatedImage.src;
-				giflink.click();
-		    }
-	});
-}
->>>>>>> origin/master
 
 
 /************************ HISTORY FUNCTIONS *************************/

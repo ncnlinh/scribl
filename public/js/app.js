@@ -1420,6 +1420,7 @@ function resetBackgroundColor(){
 }
 
 function downloadCanvas() {
+
 	// Normally transparent because default dataURL is .png
 	clearBackgroundColor();
 	
@@ -1529,6 +1530,7 @@ function gifMake(){
 		    }
 	});
 }
+
 
 
 

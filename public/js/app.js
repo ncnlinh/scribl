@@ -612,13 +612,23 @@ var	drawingLineWidthEl;
 
 var pointer,
 	penTool,
+	penPencil,
+	penCircle,
+	penSpray,
 	eraserTool,
 	clearCan,
 	undoButton,
 	redoButton,
 	uploadButton,
+	textBtn,
+	textClose,
 	textInput,
-	downloadEl;
+	downloadBtn,
+	boldBtn,
+	italicBtn,
+	underlineBtn,
+	gifmaker,
+	postOnFb;
 
 
 
@@ -659,8 +669,10 @@ var pointer,
 	undoButton 		= $('undo');
 	redoButton 		= $('redo');
 	uploadButton 	= $('uploadimages');
+	textBtn 		= $('text');
+	textClose 		= $('closetext');
 	textInput 		= $('inputtext');
-	downloadEl 		= $('download');
+	downloadBtn 		= $('download');
 	boldBtn         = $('textBold');
 	italicBtn       = $('textItalic');
 	underlineBtn    = $('textUnderline');
@@ -678,8 +690,10 @@ var pointer,
 	undoButton.onclick 		= undo;
 	redoButton.onclick 		= redo;
 	uploadButton.onclick 	= openUploader;
+	textBtn.onclick			= textModeOn;
+	textClose.onclick		= textModeOff;
 	textInput.onclick 		= addText;
-	downloadEl.onclick 		= downloadCanvas;
+	downloadBtn.onclick 	= downloadCanvas;
 	boldBtn.onclick 		= toggleTextBold;
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
@@ -889,31 +903,53 @@ function initTooltips() {
 /************************ BOARD LISTENERS *************************/
 function addWindowListeners() {
 	$(document).on('keydown', function(e){
-		if(e.ctrlKey) {  // If ctrl is pressed
-			switch(e.which){
-				case 89: // Y
-				redo();
-				e.preventDefault();
-				break;
-				case 90: // Z
-				undo();
+		if (inTextWindow) {
+			switch(e.which) {
+				case 8: // backspace
 				e.preventDefault();
 				break;
 			}
 		} else {
-			switch(e.which) {
-				case 8: // backspace
-				if (!canvas.isDrawingMode && !inEraserMode)
+			if(e.ctrlKey) {  // If ctrl is pressed
+				switch(e.which){
+					case 89: // Y
+					redo();
 					e.preventDefault();
-				break;
-				case 46: // del
-				deleteActiveObj();
-				break;
-				case 69: // e
-				eraserTool.click();
-				break;
+					break;
+					case 90: // Z
+					undo();
+					e.preventDefault();
+					break;
+					case 83: // S
+					downloadBtn.click();
+					e.preventDefault();
+					break;
+				}
+			} else {
+				switch(e.which) {
+					case 46: // del
+					deleteActiveObj();
+					break;
+					case 66: // b
+					penTool.click();
+					break;
+					case 69: // e
+					eraserTool.click();
+					break;
+					case 73: // i
+					uploadButton.click();
+					break;
+					case 84: // t
+					textBtn.click();
+					break;
+					case 86: // v
+					pointer.click();
+					break;
+					
+				}
 			}
 		}
+		
 	});
 	window.addEventListener('resize', resizeCanvas, false);
 	// window.onbeforeunload = function(e){	// Page-leave functionality
@@ -1704,12 +1740,8 @@ function setDefSettings(curr){	// *** consider adding these features to toJSON(o
 var isTextBold = false;
 var isTextItalic = false;
 var isTextUnderline = false;
-
+var inTextWindow = false;
 function addText() {
-
-
-	disableDrawAndEraser();
-
 	var input = document.getElementById("textinput");
 	var text = input.value;
 	if(text == null || text.trim() == ""){
@@ -1747,6 +1779,16 @@ function addText() {
 	isSaved = false;
 
 	clearText();
+	textModeOff();
+}
+
+function textModeOn() {
+	disableDrawAndEraser();
+	inTextWindow = true;
+}
+
+function textModeOff() {
+	inTextWindow = false;
 }
 
 function clearText(){

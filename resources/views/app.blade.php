@@ -32,8 +32,8 @@
           <output id="list"></output>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" id="inputtext">OK</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="inputtext" type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+          <button id="closetext" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
 

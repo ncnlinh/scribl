@@ -67,7 +67,7 @@ var pointer,
 	italicBtn,
 	underlineBtn,
 	gifmaker,
-	postOnFb;
+    postOnFbPrompt;
 
 
 
@@ -119,7 +119,7 @@ var pointer,
 	underlineBtn    = $('textUnderline');
 	gifmaker        = $('gif');
 
-	postOnFb = $('postOnFacebook');
+    postOnFbPrompt = $('postOnFacebookPromptBtn');
 
 	pointer.onclick 		= disableDrawAndEraser;
 	penTool.onclick 		= drawingModeOn;
@@ -138,9 +138,8 @@ var pointer,
 	boldBtn.onclick 		= toggleTextBold;
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
-	postOnFb.onclick 		= postOnFacebook;
-	gifmaker.onclick 		= gifMake;
-
+    postOnFbPrompt.onclick = postOnFacebookPrompt;
+	gifmaker.onclick = gifMake;
 	// TODO: CONSIDER REMOVING PATTERN BRUSH
 	// if (fabric.PatternBrush) {
 	// 	var vLinePatternBrush = new fabric.PatternBrush(canvas);
@@ -885,36 +884,10 @@ function resizeCanvas() {
 	canvas.calcOffset();
 }
 
-
-function postOnFacebook() {
-	$.post('/facebook/post', {
-		'_token': $('meta[name=csrf-token]').attr('content'),
-		'message': 'Hi',
-		'data': canvas.toDataURL()
-	}
-	).done(function(response) {
-        if ((response &&
-                response.success == false &&
-                response.error.code == "500" &&
-                response.error.facebookErrorCode &&
-                response.error.facebookErrorCode == "200") ||
-            (response &&
-                response.success == false &&
-                response.error.code == "405" && //not allowed
-                response.error.message == "need_authorization_publish_actions"
-            )) {
-            FB.login(function (response) {
-            }, {scope: 'publish_actions'});
-        }
-
-        if (response &&
-                response.error.code == "403" &&
-                response.error.message == "Token mismatch") {
-            //handle session expire
-        }
-    });
+function postOnFacebookPrompt() {
+    document.getElementById("postModalImage").src = canvas.toDataURL();
+    $("#beforePostModal").modal("show");
 }
-
 
 function removeAllHighlight(){
 	$("#sidebarmenu").find(":button").each(function(){

@@ -174,7 +174,23 @@ button.normal{
   background:url("../images/pen-spray.png");
 }
 
-#postOnFacebook{
+.fb-btn {
+  background-color:#3b579d;
+  border-radius:5px;
+  cursor:pointer;
+  color:#ffffff;
+}
+.fb-btn:hover {
+  background-color:#526fb5;
+  outline: none;
+}
+.fb-btn:active {
+  position:relative;
+  top:1px;
+  outline: none;
+}
+
+#postOnFacebookPromptBtn{
   position: absolute;
   right: 0;
   margin-top: -40px;
@@ -184,4 +200,22 @@ button.normal{
   height: 75px;
   border: 1px solid #000;
   margin: 10px 5px 0 0;
+}
+
+.postThumb {
+  max-width: 100%;
+  max-height: 40vh;
+  border: 1px solid #eee;
+}
+
+.center {
+  text-align: center;
+}
+
+.modal-header {
+  font-weight: 700;
+}
+
+.alert-title {
+  font-weight: 700;
 }

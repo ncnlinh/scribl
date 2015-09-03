@@ -21,4 +21,4 @@ Route::get('logout', 'AuthController@logout');
 
 Route::post('facebook/post', 'PostController@post');
 
-Route::get('scribbl/{uid}/{id}', 'PostController@get');
+Route::get('scribbl/{id}', 'PostController@get');

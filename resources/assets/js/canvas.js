@@ -47,18 +47,7 @@ var isSaved;				// Counter for whether changes have been made
 var idleTime = 0;			// Counter for number of minutes user is idle
 var idleInterval;			// Holds ID for setInterval() idle timer (for reset)
 
-var	drawingModeEl,
-	drawingOptionsEl,
-	drawingColorEl,
-	drawingShadowColorEl,
-	drawingLineWidthEl,
-	drawingShadowWidth,
-	drawingShadowOffset,
-	eraserModeEl,
-	undoEl,
-	redoEl,
-	clearEl,
-	imageBtnEl;
+var	drawingLineWidthEl;
 
 var pointer,
 	penTool,
@@ -359,6 +348,9 @@ function addWindowListeners() {
 				case 46: // del
 				deleteActiveObj();
 				break;
+				case 69: // e
+				eraserTool.click();
+				break;
 			}
 		}
 	});
@@ -600,10 +592,12 @@ function disableDrawAndEraser() {
 
 
 var erasing = false;
+var erased = false;
 function erase(ev) {
 	switch(ev.e.type.toLowerCase()) {
 		case 'mousedown':
 		erasing = true;
+		erased = false;
 		blockHistoryCalls = true;
 		identifyAndErase(ev);
 		break;
@@ -614,7 +608,8 @@ function erase(ev) {
 		case 'mouseup':
 		erasing = false;
 		blockHistoryCalls = false;
-		updateHistory();
+		if (erased)
+			updateHistory();
 		break;
 	}
 }
@@ -625,9 +620,10 @@ function identifyAndErase(ev) {
 	if (target !== undefined) {
 		if (target.type =="path") {
 			eraseArea(target,mouseEv);
-			updateHistory();
+			erased = true;
 		} else if (target.type=="group" || target.type=="circle") {
 			canvas.remove(target);
+			erased = true;
 		}
 	}
 }

@@ -92,7 +92,7 @@
             </li>
             <li><button id = "download" class="btn btn-primary normal"></button>
             </li> 
-            <li><button id = "gif" class="btn btn-primary normal">gif</button>
+            <li><button id = "gif" class="btn btn-primary normal"></button>
             </li> 
           </ul>
         <br><br>

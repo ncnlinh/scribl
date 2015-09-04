@@ -169,25 +169,41 @@
           <span id="postModalHeader">
             Post on Facebook
           </span>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <button id="postToFacebookCloseBtn" type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
 
           <div id="postModalHeader">
             <div id="postModalAlertPlaceholder"></div>
+            <h4>Static Image:</h4>
             <div class="center">
               <img class="postThumb" id="postModalImage">
+            </div>
+            <h4>GIF:</h4>
+            <div class="center">
+              <img class="postThumb" id="postModalGif">
+              <i class='fa fa-3x fa-spinner fa-pulse' id="postModalGifSpinner"></i>
             </div>
             {!! Form::open(array(
               'action' => 'PostController@post',
               'method' => 'post',
               'id' => 'formPostOnFacebook'
             )) !!}
-              <div class="form-group">
-                {!! Form::label('message', 'Message:') !!}
-                {!! Form::textarea('message', null, ['class'=>'form-control']) !!}
-              </div>
-              {!! Form::submit('Share on Facebook', ['class'=>'btn btn-primary form-control']) !!}
+            <div class="form-group">
+              {!! Form::checkbox('postToFacebook', 'postToFacebook', true, ['id'=>'postToFacebookCheckbox']) !!}
+              {!! Form::label('postToFacebook', 'Also post to Facebook\'s photo album') !!}
+            </div>
+            <div id="postToFacebookCaption" class="form-group">
+              {!! Form::label('message', 'Caption:') !!}
+              {!! Form::text('message', null, ['class'=>'form-control']) !!}
+            </div>
+            <div class="form-group">
+              {!! Form::submit('Share static Image on Facebook', ['value'=>'image', 'class'=>'btn btn-primary form-control']) !!}
+            </div>
+            <div class="form-group">
+              {!! Form::submit('Share GIF on Facebook', ['value'=>'gif', 'class'=>'btn btn-primary form-control']) !!}
+            </div>
+
             {!! Form::close() !!}
           </div>
         </div>

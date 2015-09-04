@@ -18,7 +18,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'tag', 'fb_id', 'url'];
+    protected $fillable = ['user_id', 'tag', 'fb_id', 'url', 'png_url', 'gif_url'];
 
     /**
      * The attributes excluded from the model's JSON form.

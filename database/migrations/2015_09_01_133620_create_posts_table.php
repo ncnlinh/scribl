@@ -15,8 +15,10 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_id');
-            $table->string('fb_id');
+            $table->string('fb_id')->nullable();
             $table->string('url');
+            $table->string('png_url');
+            $table->string('gif_url');
             $table->string('tag')->unique();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

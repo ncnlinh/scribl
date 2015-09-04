@@ -609,6 +609,7 @@ var idleTime = 0;			// Counter for number of minutes user is idle
 var idleInterval;			// Holds ID for setInterval() idle timer (for reset)
 var initHeight,initWidth;
 var	drawingLineWidthEl;
+var gifImage;
 
 var pointer,
 	penTool,
@@ -628,7 +629,8 @@ var pointer,
 	italicBtn,
 	underlineBtn,
 	gifmaker,
-    postOnFbPrompt;
+    postOnFbPrompt,
+    postToFacebookCheckbox;
 
 
 
@@ -682,6 +684,7 @@ var pointer,
 
     postOnFbPrompt = $('postOnFacebookPromptBtn');
 
+
 	pointer.onclick 		= disableDrawAndEraser;
 	penTool.onclick 		= drawingModeOn;
 	penPencil.onclick		= penModePencil;
@@ -700,6 +703,7 @@ var pointer,
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
     postOnFbPrompt.onclick = postOnFacebookPrompt;
+
 	gifmaker.onclick = gifMake;
 	// TODO: CONSIDER REMOVING PATTERN BRUSH
 	// if (fabric.PatternBrush) {
@@ -1446,8 +1450,13 @@ function resizeCanvas() {
 }
 
 function postOnFacebookPrompt() {
+    renderGif();
     document.getElementById("postModalImage").src = canvas.toDataURL();
-    $("#beforePostModal").modal("show");
+    document.getElementById("postModalGif").classList.add('hidden');
+    document.getElementById("postModalGifSpinner").classList.remove('hidden');
+    document.getElementById("postModalAlertPlaceholder").classList.add('hidden');
+    $("#beforePostModal").modal({backdrop: 'static', keyboard: false});
+    document.getElementById("postToFacebookCheckbox").onclick = handleTogglePostToFacebookCheckbox;
 }
 
 function removeAllHighlight(){
@@ -1489,8 +1498,10 @@ function breakGroup(grp) {
 function gifMake(){
 	var animatedImage;
 	var width = initWidth/initHeight * 360;
+    var finalList = gifList;
+    finalList.push(canvas.toDataURL());
 	gifshot.createGIF(
-		{images: gifList, gifWidth: width, gifHeight: 360, interval: 0.2}
+		{images: finalList, gifWidth: width, gifHeight: 360, interval: 0.2}
 		, function (obj) {
 			if (!obj.error) {
 				var image = obj.image, animatedImage = document.createElement('img');
@@ -1504,6 +1515,27 @@ function gifMake(){
 	});
 }
 
+function renderGif() {
+    var width = initWidth/initHeight * 360;
+    var finalList = gifList;
+    finalList.push(canvas.toDataURL());
+    gifshot.createGIF(
+        {images: finalList, gifWidth: width, gifHeight: 360, interval: 0.2}
+        , function (obj) {
+            if (!obj.error) {
+                gifImage = obj.image;
+                document.getElementById("postModalGif").classList.remove('hidden');
+                document.getElementById("postModalGifSpinner").classList.add('hidden');
+                document.getElementById("postModalGif").src = gifImage;
+            }
+        }
+    );
+}
+
+function getGifDataURL() {
+    return gifImage;
+}
+
 
 
 
@@ -1513,7 +1545,7 @@ var histIndex;
 var histMax;
 var blockHistoryCalls;
 var gifList;
-var count = 0, interval = 2;
+var count = 0, interval = 1;
 function initHistory() {
 	// May not be necessary, this just makes
 	// sure the canvas is initialised first
@@ -2137,19 +2169,42 @@ function checkPos(curr){
 	return false;
 }
 
+/**************** MISC *******************/
+function handleTogglePostToFacebookCheckbox() {
+    if (document.getElementById('postToFacebookCheckbox').checked == false) {
+        document.getElementById('postToFacebookCaption').classList.add('hidden');
+    } else {
+        document.getElementById('postToFacebookCaption').classList.remove('hidden');
+    }
+}
+
+
 $(document).ready( function() {
 
     $('#formPostOnFacebook').on('submit', function(event) {
         event.preventDefault();
-        //.....
-        //show some spinner etc to indicate operation in progress
-        //.....
+        document.getElementById("postModalAlertPlaceholder").classList.remove('hidden');
+        $('#postModalAlertPlaceholder').html(
+            '<div class="alert alert-warning" role="alert">' +
+            '<span><span class="alert-title">Sharing...</span> ' +
+            '</span>' +
+            '</div>'
+        )
+        $("#beforePostModal").animate({ scrollTop: 0 }, "slow");
+        $("#postToFacebookCloseBtn").prop('disabled', true);
         var formData = {
             '_token': $('input[name="_token"]').val(),
             message: $('textarea[name="message"]').val(),
-            data: canvas.toDataURL()
+            data: canvas.toDataURL(),
+            gif: getGifDataURL(),
+            postToFacebook: $('input:checked[name="postToFacebook"]').val() != null
         }
-
+        /***
+         * POST to
+         * - request authorization to post from user
+         * - store png and gif in backend and storage
+         *
+         **/
         $.ajax({
             type     : "POST",
             url      : $(this).attr('action'),
@@ -2157,6 +2212,8 @@ $(document).ready( function() {
             cache    : false,
 
             success  : function(response) {
+                document.getElementById("postModalAlertPlaceholder").classList.remove('hidden');
+                // Authorization
                 if ((response &&
                     response.success == false &&
                     response.error.code == "500" &&
@@ -2170,7 +2227,7 @@ $(document).ready( function() {
                     FB.login(function (response) {
                         if (response.authResponse) {
                             $('#postModalAlertPlaceholder').html(
-                                '<div class="alert alert-warning" role="alert">' +
+                                '<div class="alert alert-info" role="alert">' +
                                 '<a class="close" data-dismiss="alert">&times;</a>' +
                                 '<span><span class="alert-title">Facebook authorization completed.</span> ' +
                                 'Please click the share button again to share.</a>' +
@@ -2179,13 +2236,14 @@ $(document).ready( function() {
                             )
                         } else {
                             $('#postModalAlertPlaceholder').html(
-                                '<div class="alert alert-warning" role="alert">' +
+                                '<div class="alert alert-danger" role="alert">' +
                                 '<a class="close" data-dismiss="alert">&times;</a>' +
                                 '<span>' +
                                 'Please authorize the app to post on your Facebook.</a>' +
                                 '</span>' +
                                 '</div>'
                             )
+                            $("html, body").animate({ scrollTop: 0 }, "slow");
                         }
                     }, {scope: 'publish_actions'});
                 }
@@ -2206,17 +2264,26 @@ $(document).ready( function() {
 
                 if (response &&
                     response.success == true) {
-                    $('#postModalAlertPlaceholder').html(
-                        '<div class="alert alert-success" role="alert">' +
-                            '<a class="close" data-dismiss="alert">&times;</a>' +
-                            '<span><span class="alert-title">Post completed!</span> Check your post at ' +
-                                '<a href="'+response.data.url+'">'+response.data.url+'</a> and ' +
-                                '<a href="http://facebook.com/'+response.data.fbId+'">'+'http://facebook.com/'+response.data.fbId+'</a>' +
-                            '</span>' +
+                    var htmlString = '<div class="alert alert-success" role="alert">' +
+                        '<a class="close" data-dismiss="alert">&times;</a>' +
+                        '<span><span class="alert-title">Post completed!</span> Check your post at ' +
+                        '<a href="'+response.data.url+'">'+response.data.url+'</a>';
+                    if (response.data.fbId == null) {
+                        htmlString +='</span></div>'
+                    } else {
+                        htmlString += ' and ' +
+                        '<a href="http://facebook.com/'+response.data.fbId+'">'+'http://facebook.com/'+response.data.fbId+'</a>' +
+                        '</span>' +
                         '</div>'
-                    )
+                    }
+
+                    $('#postModalAlertPlaceholder').html(htmlString)
                 }
+            },
+            complete : function () {
+                $("#postToFacebookCloseBtn").prop('disabled', false);
             }
+
         })
     });
 

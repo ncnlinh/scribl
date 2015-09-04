@@ -50,6 +50,8 @@ elixir(function(mix) {
         paths['landing-page'] + '/img/**'
       ], 'public/images')
       .styles([
+          paths.bootstrap + '/dist/css/bootstrap.min.css',
+          paths.bootstrap + '/dist/css/bootstrap-theme.min.css',
           paths['landing-page'] + '/font-awesome/css/font-awesome.min.css',
           'landing-page.css'
       ], 'public/css/landing.css');

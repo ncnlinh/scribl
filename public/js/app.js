@@ -2283,15 +2283,25 @@ $(document).ready( function() {
 
                 if (response &&
                     response.success == true) {
-
+                        $('#postModalAlertPlaceholder').html(
+                            '<div class="alert alert-info" role="alert">' +
+                            '<a class="close" data-dismiss="alert">&times;</a>' +
+                            '<span><span class="alert-title">Post to your wall!</span> ' +
+                            'Add this link so your friend can come and check out your post: ' +
+                            '<a href="'+response.data.url+'">'+response.data.url+'</a>' +
+                            '</span>' +
+                            '</div>'
+                        )
                         FB.ui({
-                            //method: 'feed',
-                            //link: postType == "image" ? response.data.pngUrl : response.data.gifUrl,
-                            //name: 'SCRIBL',
-                            //caption: 'SCRIBL',
-                            //description: 'SCRIBL'
-                            method: 'share',
-                            href: response.data.url,
+                            method: 'feed',
+                            link: postType == "image" ? response.data.pngUrl : response.data.gifUrl,
+                            name: 'SCRIBL',
+                            caption: 'SCRIBL',
+                            description: 'Post to your wall! ' +
+                            'Add this link so your friend can come and check out your post: ' +
+                            response.data.url
+                            //method: 'share',
+                            //href: response.data.url,
                         }, function(response2){
                             var htmlString = '<div class="alert alert-success" role="alert">' +
                                 '<a class="close" data-dismiss="alert">&times;</a>' +

@@ -77,13 +77,10 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#about">Top</a>
+                            <a href="#whyscribl">Why Scribl?</a>
                         </li>
                         <li>
-                            <a href="#services">What's a Scribl?</a>
-                        </li>
-                        <li>
-                            <a href="#contact">Bottom</a>
+                            <a href="#getstarted">Get Started!</a>
                         </li>
                     </ul>
                 </div>
@@ -128,7 +125,7 @@
 
         <!-- Page Content -->
 
-        <a name="services"></a>
+        <a name="whyscribl"></a>
         <div class="content-section-a">
 
             <div class="container">
@@ -210,7 +207,7 @@
         </div>
         <!-- /.content-section-a -->
 
-        <a name="contact"></a>
+        <a name="getstarted"></a>
         <div class="banner">
 
             <div class="container">
@@ -252,15 +249,11 @@
                             </li>
                             <li class="footer-menu-divider">⋅</li>
                             <li>
-                                <a href="#about">About</a>
+                                <a href="#whyscribl">Why Scribl?</a>
                             </li>
                             <li class="footer-menu-divider">⋅</li>
                             <li>
-                                <a href="#services">Services</a>
-                            </li>
-                            <li class="footer-menu-divider">⋅</li>
-                            <li>
-                                <a href="#contact">Contact</a>
+                                <a href="#getstarted">Get Started!</a>
                             </li>
                         </ul>
                         <p class="copyright text-muted small">A CS3216 Project (15/16 Sem 1)</p>

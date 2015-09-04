@@ -74,7 +74,7 @@
                     <span id="pen-modes">
                       <button id="pen-pencil" class="btn btn-primary highlight brush-sel" title="Pencil"></button>
                       <button id="pen-circle" class="btn btn-primary normal brush-sel" title="Circles"></button> 
-                      <button id="pen-spray" class="btn btn-primary normal brush-sel" title="Spray Can"></button>
+                      <!-- <button id="pen-spray" class="btn btn-primary normal brush-sel" title="Spray Can"></button> -->
                     </span>
                   </li>
                   <li role="presentation" class="divider"></li>

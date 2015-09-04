@@ -6,7 +6,7 @@
   <meta property="og:site_name" content="Scribl">
   <meta property="fb:app_id" content="{{env('FACEBOOK_APP_ID')}}">
   @if (isset($post))
-    <meta property="og:image" content=https://s3-ap-southeast-1.amazonaws.com/cs3216-2015-assg1-scribl/production/img/1/55e98b66a5cdb/image.gif">
+    <meta property="og:image" content="https://s3-ap-southeast-1.amazonaws.com/cs3216-2015-assg1-scribl/production/img/1/55e98b66a5cdb/image.gif">
 
   @endif
 
@@ -47,7 +47,8 @@
     </div>
   </div>
   <!--************************* DRAWING AREA *************************-->
-  <table class="content"><tr>
+  <div id="body-wrapper" align="center" style="background-color:black">
+  <table class="content" style="background-color:white"><tr>
     <!--************************* BUTTONS *************************-->
     <td id = "sidebar" align="right">
       <div id="sidebarcontent">
@@ -125,6 +126,7 @@
     </td>
   </tr>
   </table>
+  </div>
 
   <!--************************* POST MODAL **************************-->
   @if (isset($post))

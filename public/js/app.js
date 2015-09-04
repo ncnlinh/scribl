@@ -643,14 +643,10 @@ var pointer,
 		isDrawingMode: true,
 		selection: false
 	});
-	initHeight = window.innerHeight-100;
-	initWidth = window.innerWidth-200;
-	canvas.setWidth(initWidth);
-	canvas.setHeight(initHeight);
 
+	initCanvasSize();
 	addCanvasListeners();
 	addWindowListeners();
-	resizeCanvas();
 	//promptBoardEmpty();
 	initColPickers();
 	initTooltips();
@@ -1451,9 +1447,19 @@ function downloadCanvas() {
 // Resets the canvas dimensions to match window,
 // then draws the new borders accordingly.
 function resizeCanvas() {
+	var newHeight = window.innerHeight;
+	var newWidth = initWidth/initHeight * newHeight;
+	canvas.setWidth(newWidth);
+	canvas.setHeight(newHeight);
+	canvas.calcOffset();
+}
+
+function initCanvasSize() {
 	canvas.setWidth(window.innerWidth - $('#sidebar').width());
 	canvas.setHeight(window.innerHeight);
 	canvas.calcOffset();
+	initWidth = canvas.getWidth();
+	initHeight = canvas.getHeight();
 }
 
 function postOnFacebookPrompt() {

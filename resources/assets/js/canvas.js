@@ -54,7 +54,7 @@ var pointer,
 	penTool,
 	penPencil,
 	penCircle,
-	penSpray,
+	// penSpray,
 	eraserTool,
 	clearCan,
 	undoButton,
@@ -103,7 +103,7 @@ var pointer,
 	penTool 		= $('pentool');
 	penPencil 		= $('pen-pencil');
 	penCircle		= $('pen-circle');
-	penSpray		= $('pen-spray');
+	// penSpray		= $('pen-spray');
 	eraserTool 		= $('eraser');
 	clearCan 		= $('clearcanvas');
 	undoButton 		= $('undo');
@@ -126,7 +126,7 @@ var pointer,
 	penTool.onclick 		= drawingModeOn;
 	penPencil.onclick		= penModePencil;
 	penCircle.onclick 		= penModeCircle;
-	penSpray.onclick 		= penModeSpray;
+	// penSpray.onclick 		= penModeSpray;
 	eraserTool.onclick 		= eraserModeOn;
 	clearCan.onclick 		= clearCanvas;
 	undoButton.onclick 		= undo;
@@ -539,8 +539,8 @@ function penModePencil() {
 		$("#pen-pencil").removeClass("normal").addClass("highlight");
 	if($("#pen-circle").hasClass("highlight"))
 		$("#pen-circle").removeClass("highlight").addClass("normal");
-	if($("#pen-spray").hasClass("highlight"))
-		$("#pen-spray").removeClass("highlight").addClass("normal");
+	// if($("#pen-spray").hasClass("highlight"))
+	// 	$("#pen-spray").removeClass("highlight").addClass("normal");
 	canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
 	canvas.freeDrawingBrush.color = drawcolor;
 	canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
@@ -551,24 +551,24 @@ function penModeCircle() {
 		$("#pen-circle").removeClass("normal").addClass("highlight");
 	if($("#pen-pencil").hasClass("highlight"))
 		$("#pen-pencil").removeClass("highlight").addClass("normal");
-	if($("#pen-spray").hasClass("highlight"))
-		$("#pen-spray").removeClass("highlight").addClass("normal");
+	// if($("#pen-spray").hasClass("highlight"))
+	// 	$("#pen-spray").removeClass("highlight").addClass("normal");
 	canvas.freeDrawingBrush = new fabric.CircleBrush(canvas);
 	canvas.freeDrawingBrush.color = drawcolor;
 	canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
 }
-function penModeSpray() {
-	currPenMode = 'Spray';
-	if($("#pen-spray").hasClass("normal"))
-		$("#pen-spray").removeClass("normal").addClass("highlight");
-	if($("#pen-circle").hasClass("highlight"))
-		$("#pen-circle").removeClass("highlight").addClass("normal");
-	if($("#pen-pencil").hasClass("highlight"))
-		$("#pen-pencil").removeClass("highlight").addClass("normal");
-	canvas.freeDrawingBrush = new fabric.SprayBrush(canvas);
-	canvas.freeDrawingBrush.color = drawcolor;
-	canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-}
+// function penModeSpray() {
+// 	currPenMode = 'Spray';
+// 	if($("#pen-spray").hasClass("normal"))
+// 		$("#pen-spray").removeClass("normal").addClass("highlight");
+// 	if($("#pen-circle").hasClass("highlight"))
+// 		$("#pen-circle").removeClass("highlight").addClass("normal");
+// 	if($("#pen-pencil").hasClass("highlight"))
+// 		$("#pen-pencil").removeClass("highlight").addClass("normal");
+// 	canvas.freeDrawingBrush = new fabric.SprayBrush(canvas);
+// 	canvas.freeDrawingBrush.color = drawcolor;
+// 	canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
+// }
 function updatePenMode() {
 	switch(currPenMode) {
 		case "Pencil":
@@ -577,9 +577,9 @@ function updatePenMode() {
 		case "Circle":
 			penModeCircle();
 			break;
-		case "Spray":
-			penModeSpray();
-			break;
+		// case "Spray":
+		// 	penModeSpray();
+		// 	break;
 	}
 }
 

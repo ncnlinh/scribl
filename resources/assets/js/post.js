@@ -1,5 +1,11 @@
 $(document).ready( function() {
-
+    var postType;
+    $('#postToFacebookImageButton').on('click', function(event){
+        postType='image';
+    });
+    $('#postToFacebookGifButton').on('click', function(event){
+        postType='gif';
+    });
     $('#formPostOnFacebook').on('submit', function(event) {
         event.preventDefault();
         document.getElementById("postModalAlertPlaceholder").classList.remove('hidden');
@@ -83,20 +89,33 @@ $(document).ready( function() {
 
                 if (response &&
                     response.success == true) {
-                    var htmlString = '<div class="alert alert-success" role="alert">' +
-                        '<a class="close" data-dismiss="alert">&times;</a>' +
-                        '<span><span class="alert-title">Post completed!</span> Check your post at ' +
-                        '<a href="'+response.data.url+'">'+response.data.url+'</a>';
-                    if (response.data.fbId == null) {
-                        htmlString +='</span></div>'
-                    } else {
-                        htmlString += ' and ' +
-                        '<a href="http://facebook.com/'+response.data.fbId+'">'+'http://facebook.com/'+response.data.fbId+'</a>' +
-                        '</span>' +
-                        '</div>'
-                    }
 
-                    $('#postModalAlertPlaceholder').html(htmlString)
+                        FB.ui({
+                            //method: 'feed',
+                            //link: postType == "image" ? response.data.pngUrl : response.data.gifUrl,
+                            //name: 'SCRIBL',
+                            //caption: 'SCRIBL',
+                            //description: 'SCRIBL'
+                            method: 'share',
+                            href: response.data.url,
+                        }, function(response2){
+                            var htmlString = '<div class="alert alert-success" role="alert">' +
+                                '<a class="close" data-dismiss="alert">&times;</a>' +
+                                '<span><span class="alert-title">Post completed!</span> Check your post at ' +
+                                '<a href="'+response.data.url+'">'+response.data.url+'</a>';
+                            if (response.data.fbId == null) {
+                                htmlString +='</span></div>'
+                            } else {
+                                htmlString += ' and ' +
+                                    '<a href="http://facebook.com/'+response.data.fbId+'">'+'http://facebook.com/'+response.data.fbId+'</a>' +
+                                    '</span>' +
+                                    '</div>'
+                            }
+
+                            $('#postModalAlertPlaceholder').html(htmlString)
+
+                    });
+
                 }
             },
             complete : function () {

@@ -2,6 +2,13 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta property="og:title" content="Make a drawing or a gif">
+  <meta property="og:site_name" content="Scribl">
+  <meta property="fb:app_id" content="{{env('FACEBOOK_APP_ID')}}">
+  @if (isset($post))
+    <meta property="og:image" content="{{$post['gifUrl']}}">
+
+  @endif
 
   <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Scribl!</title>
@@ -198,10 +205,10 @@
               {!! Form::text('message', null, ['class'=>'form-control']) !!}
             </div>
             <div class="form-group">
-              {!! Form::submit('Share static Image on Facebook', ['value'=>'image', 'class'=>'btn btn-primary form-control']) !!}
+              {!! Form::submit('Share static Image on Facebook', ['id'=>'postToFacebookImageButton', 'value'=>'image', 'class'=>'btn btn-primary form-control']) !!}
             </div>
             <div class="form-group">
-              {!! Form::submit('Share GIF on Facebook', ['value'=>'gif', 'class'=>'btn btn-primary form-control']) !!}
+              {!! Form::submit('Share GIF on Facebook', ['id'=>'postToFacebookGifButton', 'value'=>'gif', 'class'=>'btn btn-primary form-control']) !!}
             </div>
 
             {!! Form::close() !!}

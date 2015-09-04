@@ -1,6 +1,6 @@
 window.fbAsyncInit = function() {
   FB.init({
-    appId      : '1480631925592204',
+    appId      : '1054942174524456',
     status     : true,
     xfbml      : true,
     version    : 'v2.4'
@@ -898,8 +898,6 @@ function resizeCanvas() {
 function postOnFacebookPrompt() {
     renderGif();
     document.getElementById("postModalImage").src = canvas.toDataURL();
-    document.getElementById("postModalGif").classList.add('hidden');
-    document.getElementById("postModalGifSpinner").classList.remove('hidden');
     document.getElementById("postModalAlertPlaceholder").classList.add('hidden');
     $("#beforePostModal").modal({backdrop: 'static', keyboard: false});
     document.getElementById("postToFacebookCheckbox").onclick = handleTogglePostToFacebookCheckbox;
@@ -962,6 +960,10 @@ function gifMake(){
 }
 
 function renderGif() {
+    document.getElementById("postToFacebookImageButton").disabled = true;
+    document.getElementById("postToFacebookGifButton").disabled = true;
+    document.getElementById("postModalGif").classList.add('hidden');
+    document.getElementById("postModalGifSpinner").classList.remove('hidden');
     var width = initWidth/initHeight * 360;
     var finalList = gifList;
     finalList.push(canvas.toDataURL());
@@ -973,6 +975,8 @@ function renderGif() {
                 document.getElementById("postModalGif").classList.remove('hidden');
                 document.getElementById("postModalGifSpinner").classList.add('hidden');
                 document.getElementById("postModalGif").src = gifImage;
+                document.getElementById("postToFacebookImageButton").disabled = false;
+                document.getElementById("postToFacebookGifButton").disabled = false;
             }
         }
     );

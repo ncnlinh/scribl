@@ -92,9 +92,11 @@ class PostController extends Controller
 
     list(, $data) = explode(',', $request->input('data'));
     list(, $gif) = explode(',', $request->input('gif'));
-    $savedFile = $this->saveFile($postManager, $data, $gif);
+    $savedFile = $this->saveFile($data, $gif);
     $tag = $savedFile['tag'];
     $url = $this->generatePostLink($tag);
+
+    // Posting photos to album
     if ($request->input('postToFacebook') == "true") {
       // Upload image to facebook
       $data = [
@@ -105,6 +107,7 @@ class PostController extends Controller
       try {
         // Returns a `Facebook\FacebookResponse` object
         $response = $this->fb->post('/me/photos', $data, $this->session);
+
       } catch (Facebook\Exceptions\FacebookResponseException $e) {
         return response()->json([
           'success' => false,
@@ -130,8 +133,12 @@ class PostController extends Controller
       }
 
       $graphNode = $response->getGraphNode();
+    }
+
+    // Posting to DB
+    if (isset($graphNode)) {
       $userId = Auth::user()->id;
-      $postManager->post([
+      $post = $postManager->post([
         'user_id' => $userId,
         'fb_id' => $graphNode['id'],
         'url' => $url,
@@ -139,19 +146,9 @@ class PostController extends Controller
         'png_url' => $savedFile['pngURL'],
         'gif_url' => $savedFile['gifURL']
       ]);
-      return response()->json([
-        'success' => true,
-        'data' => [
-          'fbId' => $graphNode['id'],
-          'url' => $url,
-          'tag' => $tag,
-          'pngUrl' => $savedFile['pngURL'],
-          'gifUrl' => $savedFile['gifURL']
-        ]
-      ]);
     } else {
       $userId = Auth::user()->id;
-      $postManager->post([
+      $post = $postManager->post([
         'user_id' => $userId,
         'fb_id' => null,
         'url' => $url,
@@ -159,17 +156,52 @@ class PostController extends Controller
         'png_url' => $savedFile['pngURL'],
         'gif_url' => $savedFile['gifURL']
       ]);
-      return response()->json([
-        'success' => true,
-        'data' => [
-          'fbId' => null,
-          'url' => $url,
-          'tag' => $tag,
-          'pngUrl' => $savedFile['pngURL'],
-          'gifUrl' => $savedFile['gifURL']
-        ]
-      ]);
+
     }
+//    // Posting to feed
+//
+//    $data = [
+//      'message' => $request->input('message') . $savedFile['gifURL'],
+//    ];
+//
+//    try {
+//      // Returns a `Facebook\FacebookResponse` object
+//      $response = $this->fb->post('/me/feed', $data, $this->session);
+//
+//    } catch (Facebook\Exceptions\FacebookResponseException $e) {
+//      return response()->json([
+//        'success' => false,
+//        'error' =>
+//          [
+//            'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+//            'facebookErrorType' => 'graph_api',
+//            'facebookErrorCode' => $e->getCode(),
+//            'message' => $e->getMessage()
+//          ]
+//      ]);
+//    } catch (Facebook\Exceptions\FacebookSDKException $e) {
+//      return response()->json([
+//        'success' => false,
+//        'error' =>
+//          [
+//            'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
+//            'facebookErrorType' => 'sdk',
+//            'facebookErrorCode' => $e->getCode(),
+//            'message' => $e->getMessage()
+//          ]
+//      ]);
+//    }
+
+    return response()->json([
+      'success' => true,
+      'data' => [
+        'fbId' => $post['fb_id'],
+        'url' => $url,
+        'tag' => $tag,
+        'pngUrl' => $savedFile['pngURL'],
+        'gifUrl' => $savedFile['gifURL']
+      ]
+    ]);
   }
 
   public function get(PostManager $postManager, $id) {
@@ -181,7 +213,7 @@ class PostController extends Controller
     return view('errors/404');
   }
 
-  private function saveFile(PostManager $postManager, $data, $gif) {
+  private function saveFile($data, $gif) {
     file_put_contents('/tmp/image.png', base64_decode($data));
     $tag = uniqid();
     $userId = Auth::user()->id;

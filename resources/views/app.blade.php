@@ -100,8 +100,8 @@
       <div align="center">
         @if (Auth::check())
           <a href={{url('logout')}}>
-            <button type="button" class="fb-btn">
-                <img src="../images/FB-f-Logo__blue_29.png" />Logout
+            <button type="button" class="btn" aria-label="Left Align" id = "facebook-btn">
+                <i class="fa fa-facebook-square"></i> | Log out
             </button>
           </a>
         @endif
@@ -146,7 +146,7 @@
             <div class="modal-footer">
               <a href={{url('login')}}>
                 <button type="button" class="fb-btn">
-                  <img src="../images/FB-f-Logo__blue_29.png" />Login to continue
+                 Login to continue
                 </button>
               </a>
             </div>

@@ -1,0 +1,259 @@
+#scribl {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 3em;
+  color:black;
+}
+#wb {
+  color:white;
+}
+#wb-logout, #nav-menu {
+  background-color: rgba(0,0,0,0.2);
+}
+#drawboard {
+  position: relative;
+/*  border-style: solid;
+  border-width: 5px;
+  border-color: #008080;*/
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKUlEQVQYV2NkIA4YMxKnjoH6ChmItZpohdR3I9Emgt1ojBSWZ6FsDDEAO/0DPTDnTssAAAAASUVORK5CYII=);
+}
+
+#noPreview, #bgnoPreview {
+  display:none;
+}
+
+#bgimageurl.placeholder {
+ text-align: center;
+}
+
+#facebook-btn{
+  background-color: white;
+  border-style: solid;
+  border-color: #E9E9E9;
+
+}
+
+/*#selectableBG .ui-selecting { background: #FECA40; }
+#selectableBG .ui-selected { background: #F39814; color: white; }
+#selectableBG { padding-left: 80px; width: 800px; list-style-type: none;}
+#selectableBG li { padding: 1px; width: 200px; height: 140px; line-height: 135px; text-align: center; display: inline-block; vertical-align: middle;}
+
+#infotable td {
+  padding:2px;
+  border-spacing:5px;
+}
+
+#newobjtable td {
+  padding:2px;
+}*/
+
+.color-box {
+  display: inline-block;
+  vertical-align: middle;
+  width:22px;
+  height:22px;
+  margin:0px;
+  border: 1px solid gray;
+}
+
+input[type=range] {
+  width: 50px;
+  display: inline-table;
+  vertical-align: middle;
+}
+
+#btnSwitchBoard {
+  float: right;
+}
+
+.input-group {
+  width: 400px;
+}
+
+#loadingText {
+  z-index: -1;
+  font-size: 30px;
+  margin: auto;
+  top: 40%;
+  left: 0;
+  right: 0;
+  position:absolute;
+}
+
+#sidebar {
+  background-color: #000000;
+}
+
+#title {
+  margin-bottom: 0px;
+  color:white;
+}
+#titleline {
+  margin-top: 4px;
+  color:white;
+}
+
+#sidebarcontent {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 116px;
+}
+
+#sidebarmenu{
+  list-style-type: none;
+  margin-left: 0px;
+}
+
+#sidebarmenu li button{
+  height: 40px;
+  width: 40px;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-size: 40px;
+  margin-bottom: 5px;
+  border-style:none;
+}
+#sidebarmenu li button.highlight{
+  background-color: #FFAF47;
+}
+#sidebarmenu li button.normal{
+  background-color: #E9E9E9;
+}
+
+#sidebarmenu select {
+  color:black;
+}
+
+
+#pointer{
+  background:url("../images/select2.png");
+}
+#pentool{
+  background:url("../images/pen2.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-size: 40px;
+  
+}
+
+/*#pentool.highlight{
+  background-color: #FFAF47;
+}
+#pentool.normal{
+  background-color: #E9E9E9;
+}*/
+
+button.highlight{
+  background-color: #FFAF47;
+}
+button.normal{
+  background-color: #E9E9E9;
+}
+
+
+#eraser{
+  background:url("../images/eraser.png");
+}
+#clearcanvas{
+  background:url("../images/clear.png");
+}
+#undo{
+  background:url("../images/undo.png");
+}
+#redo{
+  background:url("../images/redo.png");
+}
+#uploadimages{
+  background:url("../images/import image2.png");
+}
+#text{
+  background:url("../images/text.png");
+}
+#download{
+  background:url("../images/download img.png");
+}
+#gif{
+  background:url("../images/download gif.png");
+}
+#pen-pencil{
+  background:url("../images/pen-pencil.png");
+}
+#pen-circle{
+  background:url("../images/pen-circle.png");
+}
+#pen-spray{
+  background:url("../images/pen-spray.png");
+}
+#deleteBtn{
+  position: absolute;
+  left: 0;
+  margin-top: -40px;
+  margin-left: 20px; 
+  display: none;
+}
+
+
+.fb-btn {
+  background-color:#3b579d;
+  border-radius:5px;
+  cursor:pointer;
+  color:#ffffff;
+}
+.fb-btn:hover {
+  background-color:#526fb5;
+  outline: none;
+}
+.fb-btn:active {
+  position:relative;
+  top:1px;
+  outline: none;
+}
+
+#postOnFacebookPromptBtn{
+  position: absolute;
+  right: 0;
+  margin-top: -40px;
+  margin-right: 20px; 
+  display: inline-block;
+}
+
+.mainmenu {
+  padding-top:0px;
+  padding-bottom: 30px;
+}
+.thumb {
+  height: 75px;
+  border: 1px solid #000;
+  margin: 10px 5px 0 0;
+}
+
+.postThumb {
+  max-width: 100%;
+  max-height: 40vh;
+  border: 1px solid #eee;
+}
+
+.center {
+  text-align: center;
+}
+
+.modal-header {
+  font-weight: 700;
+}
+
+.alert-title {
+  font-weight: 700;
+}
+
+.username {
+  font-size: 14px;
+  max-width: 100%;
+  color: #ddd;
+  padding-bottom: 10px;
+}
+.username.name{
+  font-weight: 700;
+}
+
+.logoutbtn {
+  padding-bottom: 20px;
+}

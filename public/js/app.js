@@ -846,7 +846,7 @@ function initColPickers(){
 function initTooltips() {
 	$('#pointer').popover({
 	  trigger: 'hover',
-	  content: "Select(S)",
+	  content: "Select(V)",
 	  placement: 'left'
 	});
 	$('#pentool').popover({

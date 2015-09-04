@@ -114,7 +114,7 @@
       <canvas resize="true" id="canvas" width="800px" height="600px">
         This text is displayed if your browser does not support HTML5 Canvas.
       </canvas>
-      <button type="button" id="postOnFacebookPromptBtn" class="btn btn-primary">Send</button>
+      <button type="button" id="postOnFacebookPromptBtn" class="btn btn-primary">Share this drawing!</button>
     </td>
   </tr>
   </table>

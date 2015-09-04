@@ -88,7 +88,7 @@ input[type=range] {
 #sidebarcontent {
   margin-left: 20px;
   margin-right: 20px;
-  width: 100px;
+  width: 116px;
 }
 
 #sidebarmenu{
@@ -162,7 +162,10 @@ button.normal{
   background:url("../images/text.png");
 }
 #download{
-  background:url("../images/download.png");
+  background:url("../images/download img.png");
+}
+#gif{
+  background:url("../images/download gif.png");
 }
 #pen-pencil{
   background:url("../images/pen-pencil.png");
@@ -219,4 +222,3 @@ button.normal{
 .alert-title {
   font-weight: 700;
 }
-

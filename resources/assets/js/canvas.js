@@ -289,17 +289,17 @@ function initColPickers(){
 function initTooltips() {
 	$('#pointer').popover({
 	  trigger: 'hover',
-	  content: "Select",
+	  content: "Select(S)",
 	  placement: 'left'
 	});
 	$('#pentool').popover({
 	  trigger: 'hover',
-	  content: "Draw",
+	  content: "Draw(B)",
 	  placement: 'left'
 	});
 	$('#eraser').popover({
 	  trigger: 'hover',
-	  content: "Erase",
+	  content: "Erase(E)",
 	  placement: 'left'
 	});
 	$('#clearcanvas').popover({
@@ -309,24 +309,26 @@ function initTooltips() {
 	});
 	$('#undo').popover({
 	  trigger: 'hover',
-	  content: "Undo",
+	  html: true,
+	  content: "Undo<br>(Ctrl+Z)",
 	  placement: 'left'
 	});
 	$('#redo').popover({
 	  trigger: 'hover',
-	  content: "Redo",
+	  html: true,
+	  content: "Redo<br>(Ctrl+Y)",
 	  placement: 'left'
 	});
 	$('#uploadimages').popover({
 	  trigger: 'hover',
 	  html: true,
-	  content: "Insert<br>Image",
+	  content: "Insert<br>Image(I)",
 	  placement: 'left'
 	});
 	$('#text').popover({
 	  trigger: 'hover',
 	  html: true,
-	  content: "Insert<br>Text",
+	  content: "Insert<br>Text(T)",
 	  placement: 'left'
 	});
 	$('#download').popover({
@@ -350,7 +352,8 @@ function addWindowListeners() {
 		if (inTextWindow) {
 			switch(e.which) {
 				case 8: // backspace
-				e.preventDefault();
+				if (document.activeElement.id != "textinput")
+					e.preventDefault();
 				break;
 			}
 		} else {
@@ -371,6 +374,10 @@ function addWindowListeners() {
 				}
 			} else {
 				switch(e.which) {
+					case 8: // backspace
+					if (!canvas.isDrawingMode && !inEraserMode)
+						e.preventDefault();
+					break;
 					case 46: // del
 					deleteActiveObj();
 					break;
@@ -437,7 +444,7 @@ function onObjAdded(e) {
 }
 
 function onObjModified(e) {
-	checkOOB(e);
+	// checkOOB(e);
 	updateHistory();
 }
 
@@ -446,25 +453,25 @@ function onObjRemoved(e) {
 }
 
 function onObjScaling(e) {
-	setLimit(e);
+	// setLimit(e);
 }
 
 function onObjRotating(e) {
-	setLimit(e);
+	// setLimit(e);
 }
 
 // Save original state for clone (on selection)
 // Triggers switchTab(), updates InfoWindow
 function onObjSelected(e) {
 	// TODO/NOTE: UNTOUCHED FROM PREV PROJECT
-	orig = fabric.util.object.clone(e.target);
-	atLimit = {
-		top: orig.getTop(),
-		left: orig.getLeft(),
-		scaleX: orig.getScaleX(),
-		scaleY: orig.getScaleY(),
-		angle: orig.getAngle(),
-	};
+	// orig = fabric.util.object.clone(e.target);
+	// atLimit = {
+	// 	top: orig.getTop(),
+	// 	left: orig.getLeft(),
+	// 	scaleX: orig.getScaleX(),
+	// 	scaleY: orig.getScaleY(),
+	// 	angle: orig.getAngle(),
+	// };
 	//switchTab();
 	//updateInfoWin(orig);
 }
@@ -1503,110 +1510,106 @@ function toTwoDP(num){
 
 
 /************************ BOARD BOUNDARIES *************************/
-// Save last acceptable state (on scale/rotate)
-function setLimit(e){
-	var curr=e.target;
-	curr.setCoords();
-	// if not out of bounds, save state
-	// (the interval is not very fast, so this method is not so precise if you move fast)
-	if(!isOOB(curr)){
-		atLimit = {
-			top: curr.getTop(),
-			left: curr.getLeft(),
-			scaleX: curr.getScaleX(),
-			scaleY: curr.getScaleY(),
-			angle: curr.getAngle(),
-		};
-	}
-}
-// Check if out of bounds (on modified)
-function checkOOB(e){
-	var curr = e.target;
-	if(!curr) return;
-	// if scale/angle has been modified, checkScaleAngle for OOB
-	if(((orig.getScaleX() != curr.getScaleX()) || (orig.getScaleY() != curr.getScaleY())) || (orig.getAngle() != curr.getAngle()))
-		checkScaleAngle(curr);
-	// otherwise check position
-	else
-		checkPos(curr);
-	// save new state
-	orig = fabric.util.object.clone(curr);
-	atLimit = {
-		top: curr.getTop(),
-		left: curr.getLeft(),
-		scaleX: curr.getScaleX(),
-		scaleY: curr.getScaleY(),
-		angle: curr.getAngle(),
-	};
-	// console.log("After checkOOB: " + JSON.stringify(atLimit));
-	//updateInfoWin(orig);
-	setDefSettings(curr);
-	curr.setCoords();
-	isSaved = false;
-}
-// Returns object holding whether curr is OOB in the four canvas edges
-function getOOBObj(curr){
-	var bounds = curr.getBoundingRect(),
-	maxWidth = canvas.getWidth(),
-	maxHeight = canvas.getHeight();
-	// Additional 1px accounts for bounding rect.
-	// Without this checkPos will always trigger, even after correction
-	var outOf = {
-		top: bounds.top < -1,
-		left: bounds.left < -1,
-		bottom: bounds.top+bounds.height > maxHeight+1,
-		right: bounds.left+bounds.width > maxWidth+1,
-	};
-	return outOf;
-}
-// Returns boolean true if object is out of bounds in any edge(s)
-function isOOB(curr){
-	var outOf = getOOBObj(curr);
-	return (outOf.right || outOf.left) || (outOf.bottom || outOf.top);
-}
-// If object is out of bounds reset to last atLimit state
-function checkScaleAngle(curr){
-	// console.log("InsideCheckAngle: " + JSON.stringify(atLimit));
-	if(isOOB(curr)){
-		curr.set(atLimit);
-		curr.setCoords();
-		return true;
-		// console.log("New curr: " + JSON.stringify(curr));
-	}
-	return false;
-}
-// If object is out of bounds push it back in (requires object originX/Y to be "center")
-function checkPos(curr){
-	var updateCoords = false,
-	bounds = curr.getBoundingRect(),
-	maxWidth = canvas.getWidth(),
-	maxHeight = canvas.getHeight();
-	var outOf = getOOBObj(curr);
+// // Save last acceptable state (on scale/rotate)
+// function setLimit(e){
+// 	var curr=e.target;
+// 	curr.setCoords();
+// 	// if not out of bounds, save state
+// 	// (the interval is not very fast, so this method is not so precise if you move fast)
+// 	if(!isOOB(curr)){
+// 		atLimit = {
+// 			top: curr.getTop(),
+// 			left: curr.getLeft(),
+// 			scaleX: curr.getScaleX(),
+// 			scaleY: curr.getScaleY(),
+// 			angle: curr.getAngle(),
+// 		};
+// 	}
+// }
+// // Check if out of bounds (on modified)
+// function checkOOB(e){
+// 	var curr = e.target;
+// 	if(!curr) return;
+// 	// if scale/angle has been modified, checkScaleAngle for OOB
+// 	if(((orig.getScaleX() != curr.getScaleX()) || (orig.getScaleY() != curr.getScaleY())) || (orig.getAngle() != curr.getAngle()))
+// 		checkScaleAngle(curr);
+// 	// otherwise check position
+// 	else
+// 		checkPos(curr);
+// 	// save new state
+// 	orig = fabric.util.object.clone(curr);
+// 	atLimit = {
+// 		top: curr.getTop(),
+// 		left: curr.getLeft(),
+// 		scaleX: curr.getScaleX(),
+// 		scaleY: curr.getScaleY(),
+// 		angle: curr.getAngle(),
+// 	};
+// 	//updateInfoWin(orig);
+// 	setDefSettings(curr);
+// 	curr.setCoords();
+// 	isSaved = false;
+// }
+// // Returns object holding whether curr is OOB in the four canvas edges
+// function getOOBObj(curr){
+// 	var bounds = curr.getBoundingRect(),
+// 	maxWidth = canvas.getWidth(),
+// 	maxHeight = canvas.getHeight();
+// 	// Additional 1px accounts for bounding rect.
+// 	// Without this checkPos will always trigger, even after correction
+// 	var outOf = {
+// 		top: bounds.top < -1,
+// 		left: bounds.left < -1,
+// 		bottom: bounds.top+bounds.height > maxHeight+1,
+// 		right: bounds.left+bounds.width > maxWidth+1,
+// 	};
+// 	return outOf;
+// }
+// // Returns boolean true if object is out of bounds in any edge(s)
+// function isOOB(curr){
+// 	var outOf = getOOBObj(curr);
+// 	return (outOf.right || outOf.left) || (outOf.bottom || outOf.top);
+// }
+// // If object is out of bounds reset to last atLimit state
+// function checkScaleAngle(curr){
+// 	if(isOOB(curr)){
+// 		curr.set(atLimit);
+// 		curr.setCoords();
+// 		return true;
+// 	}
+// 	return false;
+// }
+// // If object is out of bounds push it back in (requires object originX/Y to be "center")
+// function checkPos(curr){
+// 	var updateCoords = false,
+// 	bounds = curr.getBoundingRect(),
+// 	maxWidth = canvas.getWidth(),
+// 	maxHeight = canvas.getHeight();
+// 	var outOf = getOOBObj(curr);
 
-	if(outOf.right){
-		updateCoords = true;
-		curr.set({left: maxWidth-bounds.width/2});
-	}
-	if(outOf.bottom){
-		updateCoords = true;
-		curr.set({top: maxHeight-bounds.height/2});
-	}
-	if(outOf.left){
-		updateCoords = true;
-		curr.set({left: bounds.width/2});
-	}
-	if(outOf.top){
-		updateCoords = true;
-		curr.set({top: bounds.height/2});
-	}
-
-	// Implement new coordinates
-	if(updateCoords){
-		curr.setCoords();
-		return true;
-	}
-	return false;
-}
+// 	if(outOf.right){
+// 		updateCoords = true;
+// 		curr.set({left: maxWidth-bounds.width/2});
+// 	}
+// 	if(outOf.bottom){
+// 		updateCoords = true;
+// 		curr.set({top: maxHeight-bounds.height/2});
+// 	}
+// 	if(outOf.left){
+// 		updateCoords = true;
+// 		curr.set({left: bounds.width/2});
+// 	}
+// 	if(outOf.top){
+// 		updateCoords = true;
+// 		curr.set({top: bounds.height/2});
+// 	}
+// 	// Implement new coordinates
+// 	if(updateCoords){
+// 		curr.setCoords();
+// 		return true;
+// 	}
+// 	return false;
+// }
 
 /**************** MISC *******************/
 function handleTogglePostToFacebookCheckbox() {

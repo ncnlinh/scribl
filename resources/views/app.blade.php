@@ -5,9 +5,9 @@
   <meta property="og:title" content="Make a drawing or a gif">
   <meta property="og:site_name" content="Scribl">
   <meta property="fb:app_id" content="{{env('FACEBOOK_APP_ID')}}">
-  @if (isset($post))
-    <meta property="og:image" content="{{$post['gifUrl']}}">
-  @endif
+  {{--@if (isset($post))--}}
+    {{--<meta property="og:image" content="{{$post['gifUrl']}}">--}}
+  {{--@endif--}}
 
   <meta name="csrf-token" content="{{csrf_token()}}">
   <title>Scribl!</title>

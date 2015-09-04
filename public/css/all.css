@@ -460,6 +460,13 @@ colpick Color Picker / colpick.com
  text-align: center;
 }
 
+#facebook-btn{
+  background-color: white;
+  border-style: solid;
+  border-color: #E9E9E9;
+
+}
+
 /*#selectableBG .ui-selecting { background: #FECA40; }
 #selectableBG .ui-selected { background: #F39814; color: white; }
 #selectableBG { padding-left: 80px; width: 800px; list-style-type: none;}

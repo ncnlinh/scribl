@@ -69,7 +69,8 @@ var pointer,
 	underlineBtn,
 	gifmaker,
     postOnFbPrompt,
-    postToFacebookCheckbox;
+    postToFacebookCheckbox,
+    deleteBtn;
 
 
 
@@ -111,11 +112,12 @@ var pointer,
 	textBtn 		= $('text');
 	textClose 		= $('closetext');
 	textInput 		= $('inputtext');
-	downloadBtn 		= $('download');
+	downloadBtn 	= $('download');
 	boldBtn         = $('textBold');
 	italicBtn       = $('textItalic');
 	underlineBtn    = $('textUnderline');
 	gifmaker        = $('gif');
+	deleteBtn		= $('deleteBtn');
 
     postOnFbPrompt = $('postOnFacebookPromptBtn');
 
@@ -137,7 +139,8 @@ var pointer,
 	boldBtn.onclick 		= toggleTextBold;
 	italicBtn.onclick 		= toggleTextItalic;
 	underlineBtn.onclick 	= toggleTextUnderline;
-    postOnFbPrompt.onclick = postOnFacebookPrompt;
+    postOnFbPrompt.onclick  = postOnFacebookPrompt;
+    deleteBtn.onclick 		= deleteActiveObj;
 
 	gifmaker.onclick = gifMake;
 	// TODO: CONSIDER REMOVING PATTERN BRUSH
@@ -470,6 +473,7 @@ function onObjSelected(e) {
 	// };
 	//switchTab();
 	//updateInfoWin(orig);
+	$('#deleteBtn').show();
 }
 
 function onPathCreated(e) {
@@ -481,6 +485,7 @@ function onSelectionCleared() {
 	// 	resetInfoWin();
 	// 	switchTab("create");
 	// }
+	$('#deleteBtn').hide();
 }
 
 function onMouseDown(ev) {

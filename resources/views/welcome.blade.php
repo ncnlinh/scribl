@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Scribbl!</title>
+        <title>Scribl!</title>
         <link href="//fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="/css/landing.css">
 
@@ -77,13 +77,13 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#about">About</a>
+                            <a href="#about">Top</a>
                         </li>
                         <li>
-                            <a href="#services">Services</a>
+                            <a href="#services">What's a Scribl?</a>
                         </li>
                         <li>
-                            <a href="#contact">Contact</a>
+                            <a href="#contact">Bottom</a>
                         </li>
                     </ul>
                 </div>
